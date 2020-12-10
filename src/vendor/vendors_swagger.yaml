@@ -1,0 +1,11 @@
+
+/vendors:
+  get:
+    description: 
+    responses:
+      '200':
+        description: OK
+
+
+
+  
