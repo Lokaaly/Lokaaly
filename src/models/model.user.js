@@ -137,6 +137,15 @@ UserSchema.methods.generateJwtToken = function () {
 	return token;
 };
 
+UserSchema.methods.loginResponse = function () {
+	const userInfo = {
+		role: this.role,
+		authType: this.authType,
+		status: this.status,
+	};
+	return userInfo;
+};
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = {

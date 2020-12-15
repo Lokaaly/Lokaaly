@@ -2,8 +2,9 @@ const { Product } = require('../models/model.product');
 const { MS } = require('../custom.errors');
 const { VENDOR_STATUSES } = require('../models/model.user');
 
-exports.getProductsList = async (vendorId, filter) => {
-	const { skip = 0, limit = 10 } = filter;
+exports.getProductsList = async (filter) => {
+	const { skip = 0, limit = 10, vendorId } = filter || {};
+	if (!vendorId) throw new Error(MS.VENDOR.INVALID);
 	const products = await Product.find({ vendorId }).skip(skip).limit(limit).lean();
 	return products;
 };

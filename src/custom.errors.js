@@ -1,6 +1,7 @@
 const MS = {
 	LOGIN: {
 		EMAIL_EXISTS: 'User with provided email already exists!',
+		USER_NOT_EXIST: 'User with provided credentials doesnt exist!',
 		PASSWORD_NOT_MATCHED: 'Password is not matched!',
 		NOT_VERIFIED: 'Please, verify your account!',
 	},

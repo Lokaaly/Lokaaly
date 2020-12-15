@@ -14,15 +14,6 @@ const CategorySchema = new Schema({
 	versionKey: false,
 });
 
-
-CategorySchema.pre('save', async function () {
-	let category = this;
-
-	if (category.isNew) {
-		// Upload category image into cloud storage
-	}
-});
-
 const Category = mongoose.model('Category', CategorySchema);
 
 module.exports = {

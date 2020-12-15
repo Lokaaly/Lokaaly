@@ -14,7 +14,8 @@ exports.login = async (data) => {
 };
 
 exports.getVendors = async (filter) => {
-	const vendors = await User.find({ role: ROLES.VENDOR }).lean();
+	const { skip = 0, limit = 20 } = filter || {};
+	const vendors = await User.find({ role: ROLES.VENDOR }).skip(skip).limit(limit).lean();
 	return vendors;
 };
 

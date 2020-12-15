@@ -23,17 +23,16 @@ const swaggerDocs = swaggerJsDoc({
 			version: '0.1.0',
 			description: 'Web & mobile API',
 		},
-		servers:[{
-			url: 'http://localhost:8080/api',
-		}],
+		servers: [{ url: 'https://api-lokaaly.herokuapp.com/api' }, { url: 'http://localhost:8080/api' }],
 	},
-	apis: ['./src/user/swagger.user.js']
+	apis: ['./src/**/swagger.*.js']
 });
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
 
 routesList.forEach((route) => {
 	if (route.router && route.path) app.use(`/api/${route.path}`, route.router);
 });
+app.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 const PORT = process.env.PORT || 8080;
 
