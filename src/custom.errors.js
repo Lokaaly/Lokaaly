@@ -3,6 +3,7 @@ const MS = {
 		EMAIL_EXISTS: 'User with provided email already exists!',
 		USER_NOT_EXIST: 'User with provided credentials doesnt exist!',
 		PASSWORD_NOT_MATCHED: 'Password is not matched!',
+		PASS_MISSING: 'Password is missing!',
 		NOT_VERIFIED: 'Please, verify your account!',
 	},
 	CATEGORY: {
@@ -14,10 +15,12 @@ const MS = {
 		ACCESS_DENIED: 'Access denied!',
 		USER_NOT_FOUND: 'User not found!',
 		INV_VER_CODE: 'Invalid verification code! Try again!',
+		PASS_MISSING: 'Password is missing',
 		VER_CODE_MISSING: 'Verification code is missing. Please, provide it!',
 	},
 	VENDOR: {
 		INVALID: 'Invalid vendor!',
+		LOGIN_ERR: 'Provided vendor doesn\'t exist or is not active!' 
 	},
 };
 

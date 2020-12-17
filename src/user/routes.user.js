@@ -11,5 +11,6 @@ const CustomerAuth = AuthMiddleware([ROLES.CUSTOMER]);
 router.post('/login', wrapAsync(userController.userLogin));
 router.post('/sign-up', wrapAsync(userController.userSignUp));
 router.get('/verify', CustomerAuth, wrapAsync(userController.activateAccount));
+router.get('/profile', CustomerAuth, wrapAsync(userController.getProfile));
 
 module.exports = router;

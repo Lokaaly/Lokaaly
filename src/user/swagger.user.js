@@ -43,6 +43,7 @@
 *
 * /users/verify:
 *  get:
+*   summary: 'Verify customer account by generated 6 digits code send by email'
 *   tags:
 *    - 'users'
 *   security:
@@ -53,6 +54,17 @@
 *      schema:
 *       type: string
 *      description: 6 digits for verifing account.
+*   responses:
+*    '200':
+*     description: Successful operation
+*
+* /users/profile:
+*  get:
+*   summary: 'Get user (customer) profile by bearer token'
+*   tags:
+*    - 'users'
+*   security:
+*    - bearerAuth: []
 *   responses:
 *    '200':
 *     description: Successful operation

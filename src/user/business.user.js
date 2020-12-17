@@ -30,7 +30,16 @@ exports.login = async (data) => {
 	const matchedPass = user.comparePassword(data.password);
 	if (!matchedPass) throw new Error(MS.LOGIN.PASSWORD_NOT_MATCHED);
 
-	const token = user.generateJwtToken();
-	const response = user.loginResponse();
-	return { token, ...response };
+	const jwtToken = user.generateJwtToken();
+	const response = user.toJSON();
+	delete response.password;
+	delete response.verificationCode;
+	return { jwtToken, ...response };
+};
+
+exports.getProfile = async (userId) => {
+	const user = await User.findById(userId).lean();
+	delete user.password;
+	delete user.verificationCode;
+	return user;
 };

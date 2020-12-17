@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR  = 10;
 const config = require('../config/config');
 const { generateRandomCode } = require('../helpers/randomDigits');
+const { MS } = require('../custom.errors');
 
 const USER_STATUSES = {
 	VERIFIED: 'verified',
@@ -24,11 +25,6 @@ const AUTH_TYPES = {
 	GOOGLE: 'google'
 };
 
-const VENDOR_STATUSES = {
-	IN_PROGRESS: 0,
-	ACTIVATED: 1
-};
-
 const validateEmail = function (email) {
 	var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	return re.test(email);
@@ -39,15 +35,10 @@ const VendorSchema = new Schema({
 	businessType: String,
 	description: String,
 	socialMedia: String,
-	webSite: String,
 	photos: [new Schema({
 		url: String
 	})],
 	licence: String,
-	status: {
-		type: Number,
-		enum: [Object.values(VENDOR_STATUSES)],
-	},
 	raiting: {
 		type: Number,
 		default: 0
@@ -106,15 +97,18 @@ UserSchema.pre('save', async function () {
 	let user = this;
 
 	if (user.isNew && user.role === ROLES.CUSTOMER) {
+		if (!password) throw new Error(MS.AUTH.PASS_MISSING);
 		const hashedPassword = user.hashPassword();
 		user.password = hashedPassword;
 		user.verificationCode = 123456 || generateRandomCode(6); // DEV
 		user.authType = AUTH_TYPES.LOCAL;
 		user.status = user.authType === AUTH_TYPES.LOCAL ? USER_STATUSES.NOT_VERIFIED : USER_STATUSES.VERIFIED;
-		if (user.role === ROLES.VENDOR) user.vendor.status = VENDOR_STATUSES.IN_PROGRESS;
-	} else if (user.isNew && user.role === ROLES.VENDOR) {
-		// TO DO
-		console.log('Vendor creation');
+		
+	} else if (user.role === ROLES.VENDOR) {
+		if (user.isNew) {
+			user.status = USER_STATUSES.NOT_VERIFIED;
+			user.authType = AUTH_TYPES.LOCAL;
+		}
 	}
 });
 
@@ -152,5 +146,4 @@ module.exports = {
 	User,
 	USER_STATUSES,
 	ROLES,
-	VENDOR_STATUSES,
 };

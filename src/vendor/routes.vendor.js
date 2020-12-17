@@ -6,6 +6,8 @@ const { AuthMiddleware } = require('../middlewares/auth.middleware');
 const { ROLES } = require('../models/model.user');
 
 // /api/vendors
+router.post('/send-request', wrapAsync(vendorController.vendorRequest));
+router.post('/login', wrapAsync(vendorController.vendorLogin));
 router.get('/', wrapAsync(vendorController.getVendors));
 router.get('/:id', wrapAsync(vendorController.getVendorById));
 

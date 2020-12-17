@@ -11,3 +11,7 @@ exports.activateAccount = async (req, res) => {
 exports.userLogin = async (req, res) => {
 	return await businessUser.login(req.body);
 };
+
+exports.getProfile = async (req, res) => {
+	return await businessUser.getProfile(req.user._id);
+};

@@ -1,16 +1,19 @@
 const { MS } = require("../custom.errors");
-const { User, ROLES, VENDOR_STATUSES } = require("../models/model.user");
+const { User, ROLES, USER_STATUSES } = require("../models/model.user");
 const { Category } = require('../models/model.category');
+const generator = require('generate-password');
 
 exports.login = async (data) => {
-	const user =	await User.findOne({ email: data.login });
-	if (!user) throw new Error(MS.LOGIN.EMAIL);
+	let user =	await User.findOne({ email: data.login });
+	if (!user) throw new Error(MS.LOGIN.USER_NOT_EXIST);
 	const matchedPass = user.comparePassword(data.password);
-	if (!matchedPass) throw new Error(MS.LOGIN.PASSWORD);
+	if (!matchedPass) throw new Error(MS.LOGIN.PASSWORD_NOT_MATCHED);
 
-	if (user.type !== ROLES.ADMIN) throw new Error(MS.AUTH.ACCESS_DENIED);
+	if (user.role !== ROLES.ADMIN) throw new Error(MS.AUTH.ACCESS_DENIED);
 	const token = user.generateJwtToken();
-	return { token, type: user.type };
+	user = user.toJSON();
+	delete user.password;
+	return { jwtToken: token, ...user };
 };
 
 exports.getVendors = async (filter) => {
@@ -28,8 +31,8 @@ exports.getVendorById = async (vendorId) => {
 exports.activateVendor = async (vendorId) => {
 	const vendor = await User.findById(vendorId).lean();
 	if (!vendor || vendor.role !== ROLES.VENDOR) throw new Error(MS.VENDOR.INVALID);
-
-	const result = await User.findByIdAndUpdate(vendorId, { 'vendor.status': VENDOR_STATUSES.ACTIVATED });
+	const genTempPass = generator.generate({ numbers: true, length: 6 });
+	const result = await User.findOneAndUpdate({ _id: vendorId, role: ROLES.VENDOR }, { 'status': USER_STATUSES.VERIFIED, password: 123456 || genTempPass });
 	return result;
 };
 

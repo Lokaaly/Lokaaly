@@ -22,14 +22,34 @@
 *   responses:
 *    '200':
 *     description: Successful operation
+*
 *  post:
 *   tags:
 *    - 'product'
 *   security:
 *    - bearerAuth: []
+*   requestBody:
+*    content:
+*     application/json:
+*      schema:
+*       type: object
+*       properties:
+*        categoryId:
+*         type: string
+*        title:
+*         type: string
+*        description:
+*         type: string
+*        price:
+*         type: integer
+*       required:
+*        - categoryId
+*        - title
+*        - price
 *   responses:
 *    '200':
 *     description: Successful operation
+*
 *  put:
 *   tags:
 *    - 'product'
@@ -38,8 +58,6 @@
 *   responses:
 *    '200':
 *     description: Successful operation
-*
-*
 *
 *
 * /products/{id}:
@@ -56,6 +74,7 @@
 *   responses:
 *    '200':
 *     description: Successful operation
+*
 *  delete:
 *   tags:
 *    - 'product'
@@ -71,5 +90,4 @@
 *   responses:
 *    '200':
 *     description: Successful operation
-*
 */
