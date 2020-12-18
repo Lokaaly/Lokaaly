@@ -97,7 +97,10 @@ UserSchema.pre('save', async function () {
 	let user = this;
 
 	if (user.isNew && user.role === ROLES.CUSTOMER) {
-		if (!password) throw new Error(MS.AUTH.PASS_MISSING);
+		if (!user.password) throw new Error(MS.AUTH.PASS_MISSING);
+		const exEmail = await User.findOne({ email: user.email }).lean();
+		if (exEmail) throw new Error(MS.LOGIN.EMAIL_EXISTS);
+
 		const hashedPassword = user.hashPassword();
 		user.password = hashedPassword;
 		user.verificationCode = 123456 || generateRandomCode(6); // DEV
