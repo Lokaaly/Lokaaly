@@ -8,12 +8,14 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const mongoose = require('mongoose');
 const express = require('express');
 const morgan = require('morgan');
+//const formidableMiddleware = require('express-formidable');
 const app = express();
 
 app.use(morgan('common'));
 app.use(helmet());
 app.use(bodyParser.json());
 
+//app.use(formidableMiddleware());
 
 const swaggerDocs = swaggerJsDoc({
 	definition:{
@@ -23,7 +25,7 @@ const swaggerDocs = swaggerJsDoc({
 			version: '0.1.0',
 			description: 'Web & mobile API',
 		},
-		servers: [{ url: 'https://api-lokaaly.herokuapp.com/api' }, { url: 'http://localhost:8080/api' }],
+		servers: [{ url: 'http://localhost:8080/api' }, { url: 'https://api-lokaaly.herokuapp.com/api' }],
 	},
 	apis: ['./src/**/swagger.*.js']
 });

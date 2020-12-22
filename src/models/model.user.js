@@ -6,6 +6,7 @@ const SALT_WORK_FACTOR  = 10;
 const config = require('../config/config');
 const { generateRandomCode } = require('../helpers/randomDigits');
 const { MS } = require('../custom.errors');
+const { MailSenderManager } = require('../helpers/sendGrid');
 
 const USER_STATUSES = {
 	VERIFIED: 'verified',
@@ -65,8 +66,10 @@ const UserSchema = new Schema({
 		longitude: String,
 	},
 	verificationCode: {
-		type: Number,
-		default: 123456
+		type: String,
+	},
+	passwordResetCode: {
+		type: String,
 	},
 	role: {
 		type: String,
@@ -76,6 +79,9 @@ const UserSchema = new Schema({
 	authType: {
 		type: String,
 		enum: Object.values(AUTH_TYPES),
+	},
+	authId: {
+		type: String,
 	},
 	status: {
 		type: String,
@@ -97,16 +103,20 @@ UserSchema.pre('save', async function () {
 	let user = this;
 
 	if (user.isNew && user.role === ROLES.CUSTOMER) {
-		if (!user.password) throw new Error(MS.AUTH.PASS_MISSING);
+		if (user.authType === AUTH_TYPES.LOCAL && !user.password) throw new Error(MS.AUTH.PASS_MISSING);
 		const exEmail = await User.findOne({ email: user.email }).lean();
 		if (exEmail) throw new Error(MS.LOGIN.EMAIL_EXISTS);
-
-		const hashedPassword = user.hashPassword();
-		user.password = hashedPassword;
-		user.verificationCode = 123456 || generateRandomCode(6); // DEV
-		user.authType = AUTH_TYPES.LOCAL;
-		user.status = user.authType === AUTH_TYPES.LOCAL ? USER_STATUSES.NOT_VERIFIED : USER_STATUSES.VERIFIED;
 		
+		if (user.authType === AUTH_TYPES.LOCAL) {
+			const hashedPassword = user.hashPassword();
+			user.password = hashedPassword;
+			user.verificationCode = generateRandomCode(6);
+			user.status = USER_STATUSES.NOT_VERIFIED;
+
+			await MailSenderManager.sendSignUpConfirmationCode(user.email, user.verificationCode);
+		} else {
+			user.status = USER_STATUSES.VERIFIED;
+		}
 	} else if (user.role === ROLES.VENDOR) {
 		if (user.isNew) {
 			user.status = USER_STATUSES.NOT_VERIFIED;
@@ -134,13 +144,14 @@ UserSchema.methods.generateJwtToken = function () {
 	return token;
 };
 
-UserSchema.methods.loginResponse = function () {
-	const userInfo = {
-		role: this.role,
-		authType: this.authType,
-		status: this.status,
-	};
-	return userInfo;
+UserSchema.methods.userInfoResponse = function () {
+	let user = this;
+	const jwtToken = user.generateJwtToken();
+	const response = user.toJSON();
+	delete response.password;
+	delete response.verificationCode;
+	delete response.passwordResetCode;
+	return { jwtToken, ...response };
 };
 
 const User = mongoose.model('User', UserSchema);
@@ -149,4 +160,5 @@ module.exports = {
 	User,
 	USER_STATUSES,
 	ROLES,
+	AUTH_TYPES,
 };
