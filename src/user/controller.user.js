@@ -17,6 +17,11 @@ exports.getProfile = async (req, res) => {
 	return await businessUser.getProfile(req.user._id);
 };
 
+exports.updateProfile = async (req, res) => {
+	debugger;
+	return await businessUser.updateProfile();
+};
+
 // ------------------- RESET PASSWORD --------------------
 exports.forgetPassword = async (req, res) => {
 	const { email } = req.query;

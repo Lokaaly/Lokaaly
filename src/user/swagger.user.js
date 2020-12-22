@@ -37,6 +37,7 @@
 *         type: string
 *        password:
 *         type: string
+*         format: password
 *   responses:
 *    '200':
 *     description: Successful operation
@@ -65,6 +66,29 @@
 *    - 'users'
 *   security:
 *    - bearerAuth: []
+*   responses:
+*    '200':
+*     description: Successful operation
+*  put:
+*   summary: 'Update user (customer) profile by bearer token'
+*   tags:
+*    - 'users'
+*   requestBody:
+*    content:
+*     multipart/form-data:
+*      schema:
+*       type: object
+*       properties:
+*        firstName:
+*         type: string
+*         default: 'asdasdasd'
+*        lastName:
+*         type: string
+*        phoneNumber:
+*         type: string
+*        avatar:
+*         type: string
+*         format: binary
 *   responses:
 *    '200':
 *     description: Successful operation

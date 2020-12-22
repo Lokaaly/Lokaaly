@@ -47,13 +47,26 @@ const ProductSchema = new Schema({
 		title: String,
 		selectType: { type: String, enum: Object.values(SELECT_TYPES) },
 		list: [new Schema({
-			value: { type: String, required: true }
+			value: { type: String, required: true },
+			price: {
+				type: Number,
+				default: 0
+			}
 		})]
 	})],
 	addons: new Schema({
 		title: String,
 		selectType: { type: String, default: SELECT_TYPES.CHECKBOX },
-		list: [ new Schema({ value: { type: String, required: true },  }) ]
+		list: [ new Schema({ 
+			value: {
+				type: String,
+				required: true
+			},  
+			price: {
+				type: Number,
+				default: 0
+			}
+		})]
 	})
 }, {
 	versionKey: false,

@@ -71,6 +71,19 @@ const UserSchema = new Schema({
 	passwordResetCode: {
 		type: String,
 	},
+	shippingAddresses: [new Schema({
+		city: String,
+		state: String,
+		address1: String,
+		address2: String,
+		zip: String,
+		isPrimary: Boolean
+	})],
+	paymentMethods: [{
+		last4: String,
+		cardBrand: String,
+		isPrimary: Boolean
+	}],
 	role: {
 		type: String,
 		enum: Object.values(ROLES),

@@ -20,7 +20,7 @@ exports.createUser = async (data) => {
 exports.verifyAccount = async (userId, verificationCode) => {
 	if (!verificationCode) throw new Error(MS.AUTH.VER_CODE_MISSING);
 	const user = await User.findById(userId);
-	if (!user || user.verificationCode !== Number(verificationCode)) throw new Error(MS.AUTH.INV_VER_CODE);
+	if (!user || user.verificationCode !== verificationCode) throw new Error(MS.AUTH.INV_VER_CODE);
 	const updUser = await User.findByIdAndUpdate(userId, { status: USER_STATUSES.VERIFIED, verificationCode: null }, { new: true });
 	return updUser.userInfoResponse();
 };
@@ -38,6 +38,10 @@ exports.getProfile = async (userId) => {
 	delete user.password;
 	delete user.verificationCode;
 	return user;
+};
+
+exports.updateProfile = async () => {
+	return 0;
 };
 
 exports.facebookSignIn = async (data) => {
@@ -73,7 +77,7 @@ exports.googleSignIn = async (tokenId) => {
 	});
 	const { sub, email, family_name, given_name } = loginTicket.getPayload();
 
-	let user = await User.findOne(email);
+	let user = await User.findOne({ email } );
 	// Create a new user if not exists
 	if (!user) {
 		console.log('Creating a new Google user');
