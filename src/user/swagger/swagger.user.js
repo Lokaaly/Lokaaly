@@ -86,6 +86,8 @@
 *         default: 'asdasdasd'
 *        lastName:
 *         type: string
+*        userName:
+*         type: string
 *        phoneNumber:
 *         type: string
 *        avatar:

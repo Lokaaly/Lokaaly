@@ -14,7 +14,7 @@ const AuthMiddleware = (roleTypes) => {
 			}
 			const bearerToken = authToken.split(' ')[1];
 			const userDetails = jwt.verify(bearerToken, config.JWT_SECRET_KEY);
-			const user = (await User.findById(userDetails._id)).toJSON();
+			const user = await User.findById(userDetails._id);
 			if (!user) throw new Error(MS.AUTH.USER_NOT_FOUND);
 			if (!roleTypes || !roleTypes.includes(user.role)) throw new Error(MS.AUTH.ACCESS_DENIED);
 			req.user = user;

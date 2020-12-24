@@ -19,9 +19,26 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
 	debugger;
-	const data = { ...req.body, avatar: req.file };
+	const data = { ...req.body };
+	if (req.file && req.file.fieldname === 'avatar') data.avatar = req.file;
 	const userId = req.user._id;
 	return await businessUser.updateProfile(userId, data);
+};
+
+exports.addShippingAddress = async (req, res) => {
+	const data = req.body;
+	return businessUser.addShippingAddress(req.user, data);
+};
+
+exports.updateShippingAddress = async (req, res) => {
+	const updateData = req.body;
+	return businessUser.updateShippingAddress(req.user, updateData);
+};
+
+exports.removeShippingAddress = async (req, res) => {
+	const addressId = req.params.id;
+	const userId = req.user._id;
+	return businessUser.removeShippingAddress(userId, addressId);
 };
 
 // ------------------- RESET PASSWORD --------------------

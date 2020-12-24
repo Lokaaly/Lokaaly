@@ -18,6 +18,11 @@ app.use(morgan('common'));
 app.use(helmet());
 app.use(bodyParser.json());
 
+
+const swaggerServers = process.env.NODE_ENV === 'production'
+ ? [{ url:'https://api-lokaaly.herokuapp.com/api' }]
+ : [{ url: 'http://localhost:8080/api' }, { url: 'https://api-lokaaly.herokuapp.com/api' }];
+
 const swaggerDocs = swaggerJsDoc({
 	definition:{
 		openapi: "3.0.0",
@@ -26,13 +31,9 @@ const swaggerDocs = swaggerJsDoc({
 			version: '0.1.0',
 			description: 'Web & mobile API',
 		},
-		servers: [{
-			url: 'http://localhost:8080/api'
-		}, {
-			url: 'https://api-lokaaly.herokuapp.com/api'
-		}],
+		servers: swaggerServers,
 	},
-	apis: ['./src/**/swagger.*.js']
+	apis: ['./src/**/swagger/swagger.*.js']
 });
 
 routesList.forEach((route) => {

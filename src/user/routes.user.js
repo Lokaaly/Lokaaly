@@ -16,6 +16,11 @@ router.get('/verify', CustomerAuth, wrapAsync(userController.activateAccount));
 router.get('/profile', CustomerAuth, wrapAsync(userController.getProfile));
 router.put('/profile', CustomerAuth, uploader().single('avatar'), wrapAsync(userController.updateProfile));
 
+// Shipping address
+router.post('/shipping-address', CustomerAuth, wrapAsync(userController.addShippingAddress));
+router.put('/shipping-address', CustomerAuth, wrapAsync(userController.updateShippingAddress));
+router.delete('/shipping-address/:id', CustomerAuth, wrapAsync(userController.removeShippingAddress));
+
 // Reset password
 router.post('/forget-password', wrapAsync(userController.forgetPassword));
 router.post('/validate-reset-code', wrapAsync(userController.validatePasswordResetCode));

@@ -53,6 +53,7 @@ const VendorSchema = new Schema({
 const UserSchema = new Schema({
 	firstName: String,
 	lastName: String,
+	userName: String,
 	email: {
 		type: String,
 		trim: true,
@@ -75,11 +76,14 @@ const UserSchema = new Schema({
 		type: String,
 	},
 	shippingAddresses: [new Schema({
+		firstName: String,
+		lastName: String,
 		city: String,
 		state: String,
 		address1: String,
 		address2: String,
 		zip: String,
+		phoneNumber: String,
 		isPrimary: Boolean
 	})],
 	paymentMethods: [{

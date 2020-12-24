@@ -48,6 +48,28 @@ exports.updateProfile = async (userId, data) => {
 	return retVal;
 };
 
+// CUSTOMER SHIPPING ADDRESSES
+exports.addShippingAddress = async (user, data) => {
+	user.shippingAddresses.push(data);
+	const updatedDoc = await user.save();
+	return updatedDoc;
+};
+
+exports.updateShippingAddress = async (user, updateData) => {
+	if (!updateData._id) throw new Error('Shipping address is not provided');
+	user.shippingAddresses.forEach((address, i) => {
+		if (address._id.toString() === updateData._id) {
+			const updatedAddress = { ...address.toJSON(), ...updateData };
+			user.shippingAddresses[i] = updatedAddress;
+		}
+	});
+	return await user.save();
+};
+
+exports.removeShippingAddress = async (userId, addressId) => {
+	return await User.findOneAndUpdate({ _id: userId }, { $pull: { shippingAddresses: { _id: addressId } } }, { new: true });
+};
+
 exports.facebookSignIn = async (data) => {
 	const { userId, accessToken } = data;
 	const fbUserInfoGraphURL = `https://graph.facebook.com/${userId}?fields=id,first_name,last_name,email&access_token=${accessToken}`;
