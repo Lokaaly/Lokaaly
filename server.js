@@ -10,11 +10,9 @@ const mongoose = require('mongoose');
 
 const express = require('express');
 const morgan = require('morgan');
-const formidableMiddleware = require('express-formidable');
 
 const app = express();
 
-//app.use(formidableMiddleware());
 app.use(cors());
 app.use(morgan('common'));
 app.use(helmet());

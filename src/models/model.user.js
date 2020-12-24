@@ -7,6 +7,9 @@ const config = require('../config/config');
 const { generateRandomCode } = require('../helpers/randomDigits');
 const { MS } = require('../custom.errors');
 const { MailSenderManager } = require('../helpers/sendGrid');
+const { uploadFileInS3  } = require('../helpers/s3_uploader');
+const { deleteFileFromS3 } = require('../helpers/s3_lib');
+
 
 const USER_STATUSES = {
 	VERIFIED: 'verified',
@@ -138,6 +141,20 @@ UserSchema.pre('save', async function () {
 	}
 });
 
+UserSchema.pre('findOneAndUpdate', async function () {
+	let update = this.getUpdate();
+	let query = this.getQuery();
+	if (update && update.avatar) {
+		const fileFullName = update.avatar.originalname.split('.');
+		const exUser = await this.findOne({ _id: query._id}).lean();
+		if (exUser.avatar) {
+			await deleteFileFromS3(exUser.avatar);
+		}
+		const url = await uploadFileInS3(query._id, exUser.role, fileFullName[0], fileFullName[1], update.avatar.buffer);
+		update.avatar = url; 
+	}
+});
+
 // --------------------------> METHODS <------------------------------
 UserSchema.methods.comparePassword = function (candidatePassword) {
 	const isMatch = bcrypt.compareSync(candidatePassword, this.password);
@@ -159,12 +176,16 @@ UserSchema.methods.generateJwtToken = function () {
 
 UserSchema.methods.userInfoResponse = function () {
 	let user = this;
-	const jwtToken = user.generateJwtToken();
-	const response = user.toJSON();
-	delete response.password;
-	delete response.verificationCode;
-	delete response.passwordResetCode;
-	return { jwtToken, ...response };
+	let response = null;
+	if (user) {
+		const jwtToken = user.generateJwtToken();
+		const userJsonData = user.toJSON();
+		delete userJsonData.password;
+		delete userJsonData.verificationCode;
+		delete userJsonData.passwordResetCode;
+		response = { jwtToken, ...userJsonData };
+	}
+	return response;
 };
 
 const User = mongoose.model('User', UserSchema);
@@ -173,5 +194,5 @@ module.exports = {
 	User,
 	USER_STATUSES,
 	ROLES,
-	AUTH_TYPES,
+	AUTH_TYPES
 };

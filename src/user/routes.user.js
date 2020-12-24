@@ -7,13 +7,14 @@ const { ROLES } = require('../models/model.user');
 const { ResetPasswordMiddleware } = require('../middlewares/resetPasswordValidator');
 
 const CustomerAuth = AuthMiddleware([ROLES.CUSTOMER]);
+const { uploader } = require('../middlewares/multer');
 
 // /api/users
 router.post('/login', wrapAsync(userController.userLogin));
 router.post('/sign-up', wrapAsync(userController.userSignUp));
 router.get('/verify', CustomerAuth, wrapAsync(userController.activateAccount));
 router.get('/profile', CustomerAuth, wrapAsync(userController.getProfile));
-router.put('/profile', wrapAsync(userController.updateProfile));
+router.put('/profile', CustomerAuth, uploader().single('avatar'), wrapAsync(userController.updateProfile));
 
 // Reset password
 router.post('/forget-password', wrapAsync(userController.forgetPassword));

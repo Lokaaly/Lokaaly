@@ -1,5 +1,7 @@
 const aws = require('aws-sdk');
 
+const s3Bucket = process.env.S3_BUCKET;
+
 aws.config.update({
   accessKeyId: process.env.AWS_ID,
   secretAccessKey: process.env.AWS_SECRET,
@@ -9,38 +11,14 @@ aws.config.update({
 
 const s3 = new aws.S3();
 
-async function getS3File(bucket, key) {
-  console.log(`Retrieve payload from S3: ${bucket}`);
-  const data = await s3.getObject({
-    Bucket: bucket || process.env.instanceProcessingBucket,
-    Key: key,
-    ResponseContentType: 'application/json',
-  }).promise();
-  return data.Body.toString();
-}
-
-const uploadToS3 = (bucketName, filename, filedata) => {
-  try {
-    const params = {
-      Bucket: bucketName,
-      Key: filename,
-      Body: filedata,
-    };
-    return s3.putObject(params).promise().then(() => 'Successfully uploaded');
-  } catch (error) {
-    console.log('Error in uploadToS3', error);
-    throw error;
-  }
-};
-
-const uploadToS3Bucket = ({ bucket, albumName, file }) => new Promise((resolve, reject) => {
+const uploadToS3Bucket = ({ albumName, file }) => new Promise((resolve, reject) => {
   try {
     const fileName = file.name;
     const fileData = file.data;
     const albumKey = `${encodeURIComponent(albumName)}/`;
     const fileKey = albumKey + fileName;
     s3.upload({
-      Bucket: bucket,
+      Bucket: s3Bucket,
       Key: fileKey,
       Body: fileData,
       ACL: 'public-read',
@@ -55,9 +33,10 @@ const uploadToS3Bucket = ({ bucket, albumName, file }) => new Promise((resolve, 
   }
 });
 
-const deletePhoto = ({ photoKey }) => {
+const deleteFileFromS3 = (fileUrl) => {
   try {
-    return s3.deleteObject({ Key: photoKey }, (err, data) => {
+		const fileKey = fileUrl.split('.com/')[1];
+    return s3.deleteObject({ Bucket: s3Bucket,  Key: fileKey }, (err, data) => {
       if (err) throw new Error(err.message);
       console.log('Successfully deleted photo.', data);
       return data;
@@ -69,5 +48,6 @@ const deletePhoto = ({ photoKey }) => {
 };
 
 module.exports = {
-	uploadToS3Bucket
+	uploadToS3Bucket,
+	deleteFileFromS3
 };

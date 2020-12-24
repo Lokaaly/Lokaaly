@@ -73,6 +73,8 @@
 *   summary: 'Update user (customer) profile by bearer token'
 *   tags:
 *    - 'users'
+*   security:
+*    - bearerAuth: []
 *   requestBody:
 *    content:
 *     multipart/form-data:

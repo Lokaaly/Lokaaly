@@ -19,7 +19,9 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
 	debugger;
-	return await businessUser.updateProfile();
+	const data = { ...req.body, avatar: req.file };
+	const userId = req.user._id;
+	return await businessUser.updateProfile(userId, data);
 };
 
 // ------------------- RESET PASSWORD --------------------

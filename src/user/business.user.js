@@ -34,14 +34,18 @@ exports.login = async (data) => {
 };
 
 exports.getProfile = async (userId) => {
-	const user = await User.findById(userId).lean();
-	delete user.password;
-	delete user.verificationCode;
-	return user;
+	const user = await User.findById(userId);
+	return user.userInfoResponse();
 };
 
-exports.updateProfile = async () => {
-	return 0;
+exports.updateProfile = async (userId, data) => {
+	const retVal = await User.findOneAndUpdate({ _id: userId }, data, { new: true});
+	if (retVal) {
+		delete retVal.password;
+		delete retVal.verificationCode;
+		delete retVal.passwordResetCode;
+	}
+	return retVal;
 };
 
 exports.facebookSignIn = async (data) => {
