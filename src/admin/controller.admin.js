@@ -20,11 +20,18 @@ exports.activateVendor = async (req, res) => {
 
 exports.addCategory = async (req, res) => {
 	const data = req.body;
-	return await businessAdmin.addCategory(data);
+	const image = req.file; 
+	return await businessAdmin.addCategory(data, image);
 };
 
 exports.updateCategory = async (req, res) => {
 	const { id } = req.params;
-	const data = req.body;
-	return await businessAdmin.updateCategory(id, data);
+	const { name } = req.body;
+	const updatedData = { image: req.file, name };
+	return await businessAdmin.updateCategory(id, updatedData);
+};
+
+exports.deleteCategory = async (req, res) => {
+	const { id } = req.params;
+	return await businessAdmin.deleteCategory(id);
 };

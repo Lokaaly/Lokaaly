@@ -4,6 +4,8 @@ const adminController = require('./controller.admin');
 const { ROLES } = require('../models/static.data');
 const { wrapAsync } = require('../middlewares/handler.wrapper');
 const { AuthMiddleware } = require('../middlewares/auth.middleware');
+const { uploader } = require('../middlewares/multer');
+
 
 const AdminAuth = AuthMiddleware([ROLES.ADMIN]);
 
@@ -14,7 +16,8 @@ router.get('/vendors/:vendorId', AdminAuth, wrapAsync(adminController.getVendorB
 router.put('/vendors/:vendorId/confirm', AdminAuth, wrapAsync(adminController.activateVendor));
 
 // Category
-router.post('/category', AdminAuth, wrapAsync(adminController.addCategory));
-router.put('/category/:id', AdminAuth, wrapAsync(adminController.updateCategory));
+router.post('/category', AdminAuth, uploader().single('image'), wrapAsync(adminController.addCategory));
+router.put('/category/:id', AdminAuth, uploader().single('image'), wrapAsync(adminController.updateCategory));
+router.delete('/category/:id', AdminAuth, wrapAsync(adminController.deleteCategory));
 
 module.exports = router;

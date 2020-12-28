@@ -2,6 +2,7 @@ const userRoutes = require('./user/routes.user');
 const adminRoutes = require('./admin/routes.admin');
 const vendorRoutes = require('./vendor/routes.vendor');
 const productRoutes = require('./product/routes.product');
+const staticRoutes = require('./static/routes.static');
 
 module.exports = [{
 	path: 'users',
@@ -15,4 +16,7 @@ module.exports = [{
 }, {
 	path: 'products',
 	router: productRoutes,
+}, {
+	path: 'static',
+	router: staticRoutes,
 }];

@@ -95,24 +95,56 @@
 *    - 'admin'
 *   security:
 *    - bearerAuth: []
+
 *   requestBody:
 *    content:
-*     application/json:
+*     multipart/form-data:
 *      schema:
 *       type: object
 *       properties:
 *        name:
 *         type: string
-*         required: string
 *        image:
 *         type: string
-*         required: string
+*         format: binary
+*       required:
+*        - "name"
+*        - "image"
 *   responses:
 *    '200':
 *     description: Successful operation
 *
 * /admin/category/{id}:
 *  put:
+*   tags:
+*    - 'admin'
+*   security:
+*    - bearerAuth: []
+*   parameters:
+*    - in: path
+*      name: id
+*      schema:
+*       type: string
+*       required: true
+*   requestBody:
+*    content:
+*     multipart/form-data:
+*      schema:
+*       type: object
+*       properties:
+*        name:
+*         type: string
+*        image:
+*         type: string
+*         format: binary
+*       required:
+*        - "name"
+*        - "image"
+*   responses:
+*    '200':
+*     description: Successful operation
+*
+*  delete:
 *   tags:
 *    - 'admin'
 *   security:

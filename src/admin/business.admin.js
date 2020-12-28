@@ -40,13 +40,20 @@ exports.submitVendorRequest = async (vendorId) => {
 	return result;
 };
 
-exports.addCategory = async (data) => {
+exports.addCategory = async (data, image) => {
 	const category = new Category(data);
-	const result = await category.save();
-	return result;
+	const url = await category.uploadCategoryImage(image);
+	category.image = url;
+	return await category.save();
 };
 
 exports.updateCategory = async (id, data) => {
-	const updateResult = await Category.findByIdAndUpdate(id, data).lean();
+	const updateResult = await Category.findOneAndUpdate({_id: id }, data, { new: true }).lean();
 	return updateResult;
 };
+
+exports.deleteCategory = async (id) => {
+	const exCategory = await Category.findById(id);
+	if (!exCategory) throw new Error('Invalid category');
+	return await exCategory.remove();
+}
