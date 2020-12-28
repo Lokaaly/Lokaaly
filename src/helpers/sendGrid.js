@@ -26,6 +26,12 @@ class MailSenderManager {
     return await sendEmail(reciever, subject, htmlStr);
 	}
 
+	static async sendSubmitionForVendor (reciever, genPass) {
+		const subject = '[Lokaaly] Congratulations, you have been submitted as a vendor';
+		const htmlStr = mailTemplates.sendSubmitionNotification(genPass);
+    return await sendEmail(reciever, subject, htmlStr);
+	}
+
 	static async sendResetPasswordCode(reciever, code) {
 		const subject = '[Lokaaly] Your password reset code';
 		const htmlStr = mailTemplates.passwordReset(code);

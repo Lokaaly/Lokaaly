@@ -15,9 +15,8 @@ exports.getVendorById = async (req, res) => {
 
 exports.activateVendor = async (req, res) => {
 	const { vendorId } = req.params;
-	return await businessAdmin.activateVendor(vendorId);
+	return await businessAdmin.submitVendorRequest(vendorId);
 };
-
 
 exports.addCategory = async (req, res) => {
 	const data = req.body;

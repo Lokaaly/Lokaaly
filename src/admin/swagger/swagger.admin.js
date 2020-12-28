@@ -11,7 +11,7 @@
 *      schema:
 *       type: object
 *       properties:
-*        login:
+*        email:
 *         type: string
 *        password:
 *         type: string
@@ -30,10 +30,19 @@
 *      name: skip
 *      schema:
 *       type: integer
+*       format: int32
 *    - in: query
 *      name: limit
 *      schema:
 *       type: integer
+*       format: int32
+*    - in: query
+*      name: activeStep
+*      schema:
+*       type: integer
+*       enum: [0, 2]
+*       format: int32
+*      description: "Numeric ID of vendor active step status: 0 - Requested, 2 - Activated"
 *   responses:
 *    '200':
 *     description: Successful operation

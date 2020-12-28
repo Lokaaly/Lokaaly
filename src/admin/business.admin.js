@@ -1,24 +1,26 @@
-const { MS } = require("../custom.errors");
-const { User, ROLES, USER_STATUSES } = require("../models/model.user");
+const { MS } = require('../custom.errors');
+const { User, Admin } = require('../models/model.user');
+const { ROLES, USER_STATUSES, VENDOR_REQ_STEPS } = require('../models/static.data');
 const { Category } = require('../models/model.category');
-const generator = require('generate-password');
 
 exports.login = async (data) => {
-	let user =	await User.findOne({ email: data.login });
-	if (!user) throw new Error(MS.LOGIN.USER_NOT_EXIST);
-	const matchedPass = user.comparePassword(data.password);
-	if (!matchedPass) throw new Error(MS.LOGIN.PASSWORD_NOT_MATCHED);
+	let admin =	await Admin.findOne({ email: data.email });
+	if (!admin) throw new Error(MS.ADMIN.INVALID_CREDS);
+	const matchedPass = admin.comparePassword(data.password);
+	if (!matchedPass) throw new Error(MS.ADMIN.INVALID_CREDS);
 
-	if (user.role !== ROLES.ADMIN) throw new Error(MS.AUTH.ACCESS_DENIED);
-	const token = user.generateJwtToken();
-	user = user.toJSON();
-	delete user.password;
-	return { jwtToken: token, ...user };
+	if (admin.role !== ROLES.ADMIN) throw new Error(MS.AUTH.ACCESS_DENIED);
+	const token = admin.generateJwtToken();
+	admin = admin.toJSON();
+	delete admin.password;
+	return { jwtToken: token, ...admin };
 };
 
 exports.getVendors = async (filter) => {
-	const { skip = 0, limit = 20 } = filter || {};
-	const vendors = await User.find({ role: ROLES.VENDOR }).skip(skip).limit(limit).lean();
+	const { skip = 0, limit = 20, activeStep } = filter || {};
+	const query = { role: ROLES.VENDOR };
+	if (activeStep) query["vendor.activeStep"] = +activeStep;
+	const vendors = await User.find(query).skip(+skip).limit(+limit).lean();
 	return vendors;
 };
 
@@ -28,11 +30,13 @@ exports.getVendorById = async (vendorId) => {
 	return vendor;
 };
 
-exports.activateVendor = async (vendorId) => {
+exports.submitVendorRequest = async (vendorId) => {
 	const vendor = await User.findById(vendorId).lean();
 	if (!vendor || vendor.role !== ROLES.VENDOR) throw new Error(MS.VENDOR.INVALID);
-	const genTempPass = generator.generate({ numbers: true, length: 6 });
-	const result = await User.findOneAndUpdate({ _id: vendorId, role: ROLES.VENDOR }, { 'status': USER_STATUSES.VERIFIED, password: 123456 || genTempPass });
+
+	if (vendor.vendor.activeStep !== VENDOR_REQ_STEPS.REQUESTED) throw new Error(MS.ADMIN.VENDOR_ALREADY_SUB);
+	const result = await User.findOneAndUpdate({ _id: vendorId, role: ROLES.VENDOR }, { 'status': USER_STATUSES.VERIFIED, 'vendor.activeStep': VENDOR_REQ_STEPS.SUBMITTED }, { new: true}).lean();
+	delete result.password;
 	return result;
 };
 

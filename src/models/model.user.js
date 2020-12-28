@@ -2,32 +2,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const SALT_WORK_FACTOR  = 10;
 const config = require('../config/config');
 const { generateRandomCode } = require('../helpers/randomDigits');
 const { MS } = require('../custom.errors');
 const { MailSenderManager } = require('../helpers/sendGrid');
 const { uploadFileInS3  } = require('../helpers/s3_uploader');
 const { deleteFileFromS3 } = require('../helpers/s3_lib');
+const { ROLES, AUTH_TYPES, USER_STATUSES, VENDOR_REQ_STEPS } = require('./static.data');
+const { AdminSchema } = require('./model.admin');
+const generator = require('generate-password');
 
-
-const USER_STATUSES = {
-	VERIFIED: 'verified',
-	NOT_VERIFIED: 'not_verified'
-};
-
-const ROLES = {
-	ADMIN: 'admin',
-	VENDOR: 'vendor',
-	PROVIDER: 'provider',
-	CUSTOMER: 'customer',
-};
-
-const AUTH_TYPES = {
-	LOCAL: 'local',
-	FB: 'facebook',
-	GOOGLE: 'google'
-};
+const SALT_WORK_FACTOR  = 10;
+const SALT = bcrypt.genSaltSync(SALT_WORK_FACTOR);
 
 const validateEmail = function (email) {
 	var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -46,7 +32,33 @@ const VendorSchema = new Schema({
 	raiting: {
 		type: Number,
 		default: 0
+	},
+	activeStep: {
+		type: Number,
+		enum: Object.values(VENDOR_REQ_STEPS),
+		default: VENDOR_REQ_STEPS.REQUESTED,
 	}
+});
+
+const shippingAddressSchema = new Schema({
+	firstName: String,
+	lastName: String,
+	city: String,
+	state: String,
+	address1: String,
+	address2: String,
+	zip: String,
+	phoneNumber: String,
+	isPrimary: {
+		type: Boolean,
+		default: true,
+	}
+});
+
+const paymentMethodSchema = new Schema({
+	last4: String,
+	cardBrand: String,
+	isPrimary: { type: Boolean, default: true}
 });
 
 // ----------------->> USER SCHEMA <<----------------------------------
@@ -75,22 +87,8 @@ const UserSchema = new Schema({
 	passwordResetCode: {
 		type: String,
 	},
-	shippingAddresses: [new Schema({
-		firstName: String,
-		lastName: String,
-		city: String,
-		state: String,
-		address1: String,
-		address2: String,
-		zip: String,
-		phoneNumber: String,
-		isPrimary: Boolean
-	})],
-	paymentMethods: [{
-		last4: String,
-		cardBrand: String,
-		isPrimary: Boolean
-	}],
+	shippingAddresses: [shippingAddressSchema],
+	paymentMethods: [paymentMethodSchema],
 	role: {
 		type: String,
 		enum: Object.values(ROLES),
@@ -132,7 +130,7 @@ UserSchema.pre('save', async function () {
 			user.password = hashedPassword;
 			user.verificationCode = generateRandomCode(6);
 			user.status = USER_STATUSES.NOT_VERIFIED;
-
+			
 			await MailSenderManager.sendSignUpConfirmationCode(user.email, user.verificationCode);
 		} else {
 			user.status = USER_STATUSES.VERIFIED;
@@ -157,6 +155,14 @@ UserSchema.pre('findOneAndUpdate', async function () {
 		const url = await uploadFileInS3(query._id, exUser.role, fileFullName[0], fileFullName[1], update.avatar.buffer);
 		update.avatar = url; 
 	}
+	if (update['vendor.activeStep'] === VENDOR_REQ_STEPS.SUBMITTED) {
+		const tempGenPass = generator.generate({ length: 8, numbers: true, excludeSimilarCharacters: true });
+		const hashedTempPass = bcrypt.hashSync(tempGenPass, SALT);
+		update.password = hashedTempPass;
+
+		const exVendor = await this.findOne(query).lean();
+		await MailSenderManager.sendSubmitionForVendor(exVendor.email, tempGenPass);
+	}
 });
 
 // --------------------------> METHODS <------------------------------
@@ -167,8 +173,7 @@ UserSchema.methods.comparePassword = function (candidatePassword) {
 
 UserSchema.methods.hashPassword = function () {
 	let user = this;
-	const salt = bcrypt.genSaltSync(SALT_WORK_FACTOR);
-	const hashedPass = bcrypt.hashSync(user.password, salt);
+	const hashedPass = bcrypt.hashSync(user.password, SALT);
 	return hashedPass;
 };
 
@@ -192,11 +197,10 @@ UserSchema.methods.userInfoResponse = function () {
 	return response;
 };
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema, 'users');
+const Admin = mongoose.model('Admin', AdminSchema, 'users');
 
 module.exports = {
 	User,
-	USER_STATUSES,
-	ROLES,
-	AUTH_TYPES
+	Admin,
 };

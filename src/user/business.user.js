@@ -1,4 +1,5 @@
-const { User, USER_STATUSES, ROLES, AUTH_TYPES } = require('../models/model.user');
+const { User } = require('../models/model.user');
+const { USER_STATUSES, ROLES, AUTH_TYPES } = require('../models/static.data');
 const { MS } = require('../custom.errors');
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch').default;

@@ -55,6 +55,31 @@
 */
 
 /**
+* 	@swagger
+*
+* /vendors/password:
+*  put:
+*   tags:
+*    - 'vendors'
+*   security:
+*    - bearerAuth: []
+*   summary: 'Update password'
+*   requestBody:
+*    content:
+*     application/json:
+*      schema:
+*       type: object
+*       properties:
+*        password:
+*         type: string
+*       required:
+*        - password
+*   responses:
+*    '200':
+*     description: Successful operation
+*/
+
+/**
 * @swagger
 * /vendors:
 *  get:
@@ -89,12 +114,12 @@
 *      schema:
 *       type: object
 *       properties:
-*        login:
+*        email:
 *         type: string
 *        password:
 *         type: string
 *       required:
-*        - login
+*        - email
 *        - password
 *   responses:
 *    '200':

@@ -3,7 +3,7 @@ const router = express.Router();
 const { wrapAsync } = require('../middlewares/handler.wrapper');
 const productController = require('./controller.product');
 const { AuthMiddleware } = require('../middlewares/auth.middleware');
-const { ROLES } = require('../models/model.user');
+const { ROLES } = require('../models/static.data');
 
 const VendorAuth = AuthMiddleware([ROLES.VENDOR]);
 

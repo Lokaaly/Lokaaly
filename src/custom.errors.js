@@ -1,4 +1,8 @@
 const MS = {
+	ADMIN: {
+		INVALID_CREDS: 'Invalid admin credentials!',
+		VENDOR_ALREADY_SUB: 'Vendor has been already submitted!'
+	},
 	LOGIN: {
 		EMAIL_EXISTS: 'User with provided email already exists!',
 		USER_NOT_EXIST: 'User with provided credentials doesnt exist!',

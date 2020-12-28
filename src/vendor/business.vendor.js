@@ -1,4 +1,5 @@
-const { User, USER_STATUSES, ROLES } = require('../models/model.user');
+const { User } = require('../models/model.user');
+const { USER_STATUSES, ROLES} = require('../models/static.data');
 const { MS } = require('../custom.errors');
 
 exports.sendRequestForVendorRegistration = async (vendorRequest) => {
@@ -21,6 +22,12 @@ exports.vendorLogin = async (data) => {
 	delete response.password;
 	delete response.verificationCode;
 	return { jwtToken, ...response };
+};
+
+exports.updateVendorPassword = async (user, password) => {
+	user.password = password;
+	let retVal = await user.save();
+	return retVal.userInfoResponse();
 };
 
 exports.getVendors = async (filter) => {

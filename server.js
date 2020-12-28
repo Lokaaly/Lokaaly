@@ -10,6 +10,8 @@ const mongoose = require('mongoose');
 
 const express = require('express');
 const morgan = require('morgan');
+const { Admin } = require('./src/models/model.user');
+const { ROLES } = require('./src/models/static.data');
 
 const app = express();
 
@@ -45,6 +47,9 @@ const PORT = process.env.PORT || 8080;
 
 mongoose.connect(process.env.MONGO_DB, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
 	console.log('MongoDb is connected.');
+	// Initialize ADMIN
+	return Admin.findOneAndUpdate({ email: process.env.ADMIN_EMAIL, role: ROLES.ADMIN }, { password: process.env.ADMIN_PASS }, { upsert: true });
+}).then(() => {
 	app.listen(PORT, () => {
 		console.log(`Listening to server port ${PORT}`);
 	});

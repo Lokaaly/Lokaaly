@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('./controller.admin');
-const { ROLES } = require('../models/model.user');
+const { ROLES } = require('../models/static.data');
 const { wrapAsync } = require('../middlewares/handler.wrapper');
 const { AuthMiddleware } = require('../middlewares/auth.middleware');
 
