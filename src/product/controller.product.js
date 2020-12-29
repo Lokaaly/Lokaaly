@@ -11,7 +11,12 @@ exports.getProductById = async (req, res) => {
 };
 
 exports.addProduct = async (req, res) => {
+	debugger;
 	const { _id: vendorId } = req.user;
+	const addons = JSON.parse(req.body.addons || '[]');
+	req.body.addons = addons;
+	const data = { ...req.body };
+	if (req.files) data.images = req.files;
 	return await businessProduct.addProduct(vendorId, data);
 };
 

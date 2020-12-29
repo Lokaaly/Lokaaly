@@ -43,31 +43,22 @@ const ProductSchema = new Schema({
 		type: Boolean,
 		default: true
 	},
-	specifications: [new Schema({
+	addons: [new Schema({
 		title: String,
 		selectType: { type: String, enum: Object.values(SELECT_TYPES) },
-		list: [new Schema({
-			value: { type: String, required: true },
+		options: [new Schema({
+			name: { type: String, required: true },
 			price: {
 				type: Number,
 				default: 0
 			}
 		})]
 	})],
-	addons: new Schema({
-		title: String,
-		selectType: { type: String, default: SELECT_TYPES.CHECKBOX },
-		list: [ new Schema({ 
-			value: {
-				type: String,
-				required: true
-			},  
-			price: {
-				type: Number,
-				default: 0
-			}
-		})]
-	})
+	images: [new Schema({
+		url: {
+			type: String
+		}
+	})]
 }, {
 	versionKey: false,
 	timestamps: true,

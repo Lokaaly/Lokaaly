@@ -1,10 +1,12 @@
 const { Product } = require('../models/model.product');
 const { MS } = require('../custom.errors');
+const { uploadFileInS3 } = require('../helpers/s3_uploader');
+const { ROLES } = require('../models/static.data');
 
 exports.getProductsList = async (filter) => {
 	const { skip = 0, limit = 10, vendorId } = filter || {};
 	if (!vendorId) throw new Error(MS.VENDOR.INVALID);
-	const products = await Product.find({ vendorId }).skip(skip).limit(limit).lean();
+	const products = await Product.find({ vendorId }).skip(+skip).limit(+limit).lean();
 	return products;
 };
 
@@ -14,7 +16,14 @@ exports.getProduct = async (id) => {
 };
 
 exports.addProduct = async (vendorId, data) => {
-	const product = new Product({ vendorId, ...data });
+	const images = await Promise.all(data.images.map(async (file) => {
+		const splParts = file.originalname.split('.');
+		const fileExt = splParts[splParts.length - 1];
+		const fileName = splParts[0];
+		const url = await uploadFileInS3(vendorId, ROLES.VENDOR, fileName, fileExt, file.buffer);
+		return { url };
+	}))
+	const product = new Product({ vendorId, ...data, images });
 	const creatResult = await product.save();
 	return creatResult;
 };

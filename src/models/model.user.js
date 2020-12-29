@@ -135,10 +135,13 @@ UserSchema.pre('save', async function () {
 		} else {
 			user.status = USER_STATUSES.VERIFIED;
 		}
-	} else if (user.role === ROLES.VENDOR) {
+	} else if (user.role === ROLES.VENDOR) { // # VENDOR
 		if (user.isNew) {
 			user.status = USER_STATUSES.NOT_VERIFIED;
 			user.authType = AUTH_TYPES.LOCAL;
+		} else if (user.isModified('password')) {
+			user.password = bcrypt.hashSync(user.password, SALT);
+			if (user.vendor.activeStep === VENDOR_REQ_STEPS.SUBMITTED) user.vendor.activeStep = VENDOR_REQ_STEPS.ACTIVATED;
 		}
 	}
 });

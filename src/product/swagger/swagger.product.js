@@ -30,22 +30,31 @@
 *    - bearerAuth: []
 *   requestBody:
 *    content:
-*     application/json:
+*     multipart/form-data:
 *      schema:
 *       type: object
 *       properties:
 *        categoryId:
 *         type: string
+*        images:
+*         type: array
+*         items:
+*          type: string
+*          format: binary
 *        title:
 *         type: string
 *        description:
 *         type: string
 *        price:
 *         type: integer
+*        addons:
+*         type: string
+*         default: [{"title": "Souces","selectType": "checkbox","options": [{"name":"Cheese","price": 1}]}]
 *       required:
-*        - categoryId
-*        - title
-*        - price
+*        - "categoryId"
+*        - "title"
+*        - "description"
+*        - "price"
 *   responses:
 *    '200':
 *     description: Successful operation

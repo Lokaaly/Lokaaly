@@ -33,7 +33,7 @@ exports.updateVendorPassword = async (user, password) => {
 exports.getVendors = async (filter) => {
 	const { skip = 0, limit = 10 } = filter || {};
 	const query = { role: ROLES.VENDOR, status: USER_STATUSES.VERIFIED };
-	const vendorsList = await User.find(query).sort({ 'vendor.businessName': 'asc'}).skip(skip).limit(limit).lean();
+	const vendorsList = await User.find(query).skip(+skip).limit(+limit).lean();
 	return vendorsList;
 };
 
