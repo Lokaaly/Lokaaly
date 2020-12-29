@@ -100,3 +100,24 @@
 *    '200':
 *     description: Successful operation
 */
+
+/**
+* 	@swagger
+*
+* /products/favourite/{id}:
+*  put:
+*   tags:
+*    - 'product'
+*   security:
+*    - bearerAuth: []
+*   parameters:
+*    - in: path
+*      name: id
+*      required: true
+*      schema:
+*       type: string
+*      description: Set or Unset favourite product
+*   responses:
+*    '200':
+*     description: Successful operation
+*/

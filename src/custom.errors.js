@@ -33,6 +33,9 @@ const MS = {
 	SOCIAL_OAUTH: {
 		FAILED: 'Failed to retrieve facebook data'
 	},
+	PRODUCT: {
+		INVALID: 'Provided product id doesn\'t exist!'
+	}
 };
 
 module.exports = {

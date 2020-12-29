@@ -30,3 +30,9 @@ exports.removeProduct = async (req, res) => {
 	const { id: productId } = req.params;
 	return await businessProduct.removeProduct(vendorId, productId);
 };
+
+
+exports.setFavouriteProduct = async (req, res) => {
+	const { id: productId } = req.params;
+	return await businessProduct.setUnsetFavourite(req.user, productId);
+};

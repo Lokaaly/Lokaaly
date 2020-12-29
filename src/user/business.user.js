@@ -27,7 +27,7 @@ exports.verifyAccount = async (userId, verificationCode) => {
 };
 
 exports.login = async (data) => {
-	const user =	await User.findOne({ email: data.login });
+	const user =	await User.findOne({ email: data.email });
 	if (!user) throw new Error(MS.LOGIN.USER_NOT_EXIST);
 	const matchedPass = user.comparePassword(data.password);
 	if (!matchedPass) throw new Error(MS.LOGIN.PASSWORD_NOT_MATCHED);

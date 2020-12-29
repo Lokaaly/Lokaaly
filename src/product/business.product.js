@@ -36,4 +36,21 @@ exports.updateProduct = async (vendorId, data) => {
 exports.removeProduct = async (vendorId) => {
 	const deleteResult = await Product.findOneAndDelete({ vendorId });
 	return deleteResult;
-}
+};
+
+exports.setUnsetFavourite = async (customer, productId) => {
+	const exProduct = await Product.findById(productId);
+	if (!exProduct) throw new Error(MS.PRODUCT.INVALID);
+
+	let setFavourite = true;
+	
+	let favIndex = customer.favourites.indexOf(productId);
+	if (favIndex === -1) customer.favourites.push(productId);
+	else {
+		customer.favourites.splice(favIndex, 1);
+		setFavourite = false;
+	}
+
+	const response = await customer.save();
+	return { favourites: response.favourites, isSetFavourite: setFavourite };
+};
