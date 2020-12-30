@@ -1,3 +1,7 @@
+const { MS } = require('../custom.errors');
+const { deleteFileFromS3 } = require('../helpers/s3_lib');
+const { uploadFileInS3 } = require('../helpers/s3_uploader');
+const { Product } = require('../models/model.product');
 const businessProduct = require('./business.product');
 
 exports.getVendorProducts = async (req, res) => {
@@ -22,7 +26,7 @@ exports.addProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
 	const { _id: vendorId } = req.user;
-	return await businessProduct.updateProduct(vendorId, data);
+	return await businessProduct.updateProduct(vendorId, req.body, req.files);
 };
 
 exports.removeProduct = async (req, res) => {
@@ -30,7 +34,6 @@ exports.removeProduct = async (req, res) => {
 	const { id: productId } = req.params;
 	return await businessProduct.removeProduct(vendorId, productId);
 };
-
 
 exports.setFavouriteProduct = async (req, res) => {
 	const { id: productId } = req.params;

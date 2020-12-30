@@ -17,7 +17,7 @@ exports.getProduct = async (id) => {
 
 exports.addProduct = async (vendorId, data) => {
 	const images = await Promise.all(data.images.map(async (file) => {
-		const splParts = file.originalname.split('.');
+		const splParts = file.originalname.split('.');d
 		const fileExt = splParts[splParts.length - 1];
 		const fileName = splParts[0];
 		const url = await uploadFileInS3(vendorId, ROLES.VENDOR, fileName, fileExt, file.buffer);
@@ -28,8 +28,35 @@ exports.addProduct = async (vendorId, data) => {
 	return creatResult;
 };
 
-exports.updateProduct = async (vendorId, data) => {
-	const updData = await Product.findOneAndUpdate({ vendorId }, { ...data });
+exports.updateProduct = async (vendorId, reqBody, reqFiles) => {
+	const { productId, $pullImages, $pushImages = req.files, ...data } = reqBody;
+
+	const exProduct = await Product.findOne({ _id: productId, vendorId });
+	if (!exProduct) throw new Error(MS.PRODUCT.INVALID);
+
+	if ($pullImages) {
+		const pullImageIds = $pullImages.split(',');
+		const filteredImages = exProduct.images.filter(i => !pullImageIds.includes(i._id));
+		exProduct.images = filteredImages;
+		// Remove pulled images from S3
+		for (let imgId of pullImageIds) {
+			const imgFound = exProduct.images.find((i) => i._id === imgId);
+			if (imgFound) await deleteFileFromS3(imgFound.url);
+		}
+	}
+	if ($pushImages && reqFiles) {
+		for ( let reqFile of reqFiles) {
+			const splParts = reqFile.originalname.split('.');
+			const fileExt = splParts[1];
+			const fileName = splParts[0];
+
+			const url = await uploadFileInS3(vendorId, 'vendor', fileName, fileExt, reqFile.buffer);
+			exProduct.images.push({ url });
+		}
+	}
+	Object.keys(data).forEach((k) => exProduct[k] = data[k]);
+
+	const updData = await exProduct.save();
 	return updData;
 };
 

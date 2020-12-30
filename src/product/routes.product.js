@@ -13,7 +13,7 @@ const CustomerAuth = AuthMiddleware([ROLES.CUSTOMER]);
 router.get('/', wrapAsync(productController.getVendorProducts));
 router.get('/:id', wrapAsync(productController.getProductById));
 router.post('/', VendorAuth, uploader().array('images'), wrapAsync(productController.addProduct));
-router.put('/', VendorAuth, wrapAsync(productController.updateProduct));
+router.put('/', VendorAuth, uploader().array('$pushImages'), wrapAsync(productController.updateProduct));
 router.delete('/:id', VendorAuth, wrapAsync(productController.removeProduct));
 
 router.put('/favourite/:id', CustomerAuth, wrapAsync(productController.setFavouriteProduct));

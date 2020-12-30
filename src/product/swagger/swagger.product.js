@@ -59,11 +59,43 @@
 *    '200':
 *     description: Successful operation
 *
+*
 *  put:
 *   tags:
 *    - 'product'
 *   security:
 *    - bearerAuth: []
+*   requestBody:
+*    content:
+*     multipart/form-data:
+*      schema:
+*       type: object
+*       properties:
+*        productId:
+*         type: string
+*        categoryId:
+*         type: string
+*        $pushImages:
+*         type: array
+*         items:
+*          type: string
+*          format: binary
+*        $pullImages:
+*         type: array
+*         items:
+*          type: string
+*        title:
+*         type: string
+*        description:
+*         type: string
+*        price:
+*         type: integer
+*        addons:
+*         type: string
+*         description: 'Provide modified addons array'
+*         default: [{"title": "Souces","selectType": "checkbox","options": [{"name":"Cheese","price": 1}]}]
+*       required:
+*        - "productId"
 *   responses:
 *    '200':
 *     description: Successful operation
