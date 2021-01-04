@@ -4,7 +4,7 @@ const { uploadFileInS3 } = require('../helpers/s3_uploader');
 const { Product } = require('../models/model.product');
 const businessProduct = require('./business.product');
 
-exports.getVendorProducts = async (req, res) => {
+exports.getProducts = async (req, res) => {
 	const filter = req.query;
 	return await businessProduct.getProductsList(filter);
 };

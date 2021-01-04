@@ -10,7 +10,7 @@ const VendorAuth = AuthMiddleware([ROLES.VENDOR]);
 const CustomerAuth = AuthMiddleware([ROLES.CUSTOMER]);
 
 // BASE: - /api/products
-router.get('/', wrapAsync(productController.getVendorProducts));
+router.get('/', wrapAsync(productController.getProducts));
 router.get('/:id', wrapAsync(productController.getProductById));
 router.post('/', VendorAuth, uploader().array('images'), wrapAsync(productController.addProduct));
 router.put('/', VendorAuth, uploader().array('$pushImages'), wrapAsync(productController.updateProduct));

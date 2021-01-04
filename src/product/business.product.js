@@ -1,12 +1,20 @@
 const { Product } = require('../models/model.product');
 const { MS } = require('../custom.errors');
 const { uploadFileInS3 } = require('../helpers/s3_uploader');
-const { ROLES } = require('../models/static.data');
+const { ROLES, VENDOR_REQ_STEPS } = require('../models/static.data');
+const { User } = require('../models/model.user');
+const { deleteFileFromS3 } = require('../helpers/s3_lib');
 
 exports.getProductsList = async (filter) => {
 	const { skip = 0, limit = 10, vendorId } = filter || {};
-	if (!vendorId) throw new Error(MS.VENDOR.INVALID);
-	const products = await Product.find({ vendorId }).skip(+skip).limit(+limit).lean();
+	const query = { active: true };
+
+	if (vendorId) {
+		const exVendor = await User.findOne({ _id: vendorId, role: ROLES.VENDOR });
+		if (!exVendor || exVendor.vendor.activeStep !== VENDOR_REQ_STEPS.ACTIVATED) throw new Error(MS.VENDOR.INVALID);
+		query.vendorId = vendorId;
+	}
+	const products = await Product.find(query).skip(+skip).limit(+limit).lean();
 	return products;
 };
 
@@ -29,19 +37,21 @@ exports.addProduct = async (vendorId, data) => {
 };
 
 exports.updateProduct = async (vendorId, reqBody, reqFiles) => {
-	const { productId, $pullImages, $pushImages = req.files, ...data } = reqBody;
+	const { productId, $pullImages, $pushImages = reqFiles, ...data } = reqBody;
 
 	const exProduct = await Product.findOne({ _id: productId, vendorId });
 	if (!exProduct) throw new Error(MS.PRODUCT.INVALID);
 
 	if ($pullImages) {
 		const pullImageIds = $pullImages.split(',');
-		const filteredImages = exProduct.images.filter(i => !pullImageIds.includes(i._id));
-		exProduct.images = filteredImages;
+		const filteredImages = exProduct.images.filter(i => !pullImageIds.includes(i._id.toString()));
+		exProduct.images = filteredImages.toObject();
 		// Remove pulled images from S3
 		for (let imgId of pullImageIds) {
-			const imgFound = exProduct.images.find((i) => i._id === imgId);
-			if (imgFound) await deleteFileFromS3(imgFound.url);
+			const imgFound = exProduct.images.find((i) => i._id.toString() === imgId);
+			if (imgFound) {
+				await deleteFileFromS3(imgFound.url);
+			}
 		}
 	}
 	if ($pushImages && reqFiles) {
@@ -54,7 +64,11 @@ exports.updateProduct = async (vendorId, reqBody, reqFiles) => {
 			exProduct.images.push({ url });
 		}
 	}
-	Object.keys(data).forEach((k) => exProduct[k] = data[k]);
+	if (data.addons) data.addons = JSON.parse(data.addons);
+	Object.keys(data).forEach((k) => {
+		debugger;
+		exProduct[k] = data[k]
+	});
 
 	const updData = await exProduct.save();
 	return updData;

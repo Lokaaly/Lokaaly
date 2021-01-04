@@ -15,10 +15,9 @@
 *       type: integer
 *    - in: query
 *      name: vendorId
-*      required: true
 *      schema:
 *       type: string
-*   summary: Retrieve products from specified vendor
+*   summary: Retrieve products with filter
 *   responses:
 *    '200':
 *     description: Successful operation
