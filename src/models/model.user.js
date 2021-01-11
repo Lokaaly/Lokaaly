@@ -25,10 +25,12 @@ const VendorSchema = new Schema({
 	businessType: String,
 	description: String,
 	socialMedia: String,
+	profileImage: String,
+	backgroundImage: String,
 	photos: [new Schema({
 		url: String
 	})],
-	licence: String,
+	license: String,
 	raiting: {
 		type: Number,
 		default: 0

@@ -10,7 +10,7 @@
 *   summary: 'Send request for registration vendor in platform'
 *   requestBody:
 *    content:
-*     application/json:
+*     multipart/form-data:
 *      schema:
 *       type: object
 *       properties:
@@ -26,29 +26,26 @@
 *         type: string
 *        city:
 *         type: string
-*        vendor:
-*         type: object
-*         properties:
-*          businessName:
-*           type: string
-*          businessType:
-*           type: string
-*          description:
-*           type: string
-*          socialMedia:
-*           type: string
-*          licence:
-*           type: string
-*         required:
-*          - businessName
-*          - businessType
-*          - licence
+*        vendor.businessName:
+*         type: string
+*        vendor.businessType:
+*         type: string
+*        vendor.description:
+*         type: string
+*        vendor.socialMedia:
+*         type: string
+*        license:
+*         type: string
+*         format: binary
 *       required:
-*        - firstName
-*        - lastName
-*        - email
-*        - country
-*        - city
+*        - 'firstName'
+*        - 'lastName'
+*        - 'email'
+*        - 'country'
+*        - 'city'
+*        - 'vendor.businessName'
+*        - 'vendor.businessType'
+*        - 'license'
 *   responses:
 *    '200':
 *     description: Successful operation
@@ -95,6 +92,53 @@
 *      name: limit
 *      schema:
 *       type: integer
+*   responses:
+*    '200':
+*     description: Successful operation
+*
+*  put:
+*   summary: 'Update vendor page'
+*   tags:
+*    - 'vendors'
+*   security:
+*    - bearerAuth: []
+*   requestBody:
+*    content:
+*     multipart/form-data:
+*      schema:
+*       type: object
+*       properties:
+*        businessName:
+*         type: string
+*        businessType:
+*         type: string
+*        description:
+*         type: string
+*        socialMedia:
+*         type: string
+*        $pushImages:
+*         type: array
+*         items:
+*          type: string
+*          format: binary
+*        $pullImages:
+*         type: array
+*         items:
+*          type: string
+*        license:
+*         type: array
+*         items:
+*          type: string
+*          format: binary
+*         description: 'Support in pdf format'
+*        profileImage:
+*         type: array
+*         items:
+*          type: string
+*          format: binary
+*        backgroundImage:
+*         type: string
+*         description: 'Provide photo id from photos'
 *   responses:
 *    '200':
 *     description: Successful operation
