@@ -4,7 +4,6 @@ const config = require('../config/config');
 const { MS } = require('../custom.errors');
 const { Category } = require('./model.category');
 
-
 const SELECT_TYPES = {
 	SINGLE: 'single',
 	MULTI: 'multi',
@@ -43,6 +42,10 @@ const ProductSchema = new Schema({
 		type: Boolean,
 		default: true
 	},
+	size: [new Schema({
+		name: String,
+		description: String
+	})],
 	addons: [new Schema({
 		title: String,
 		selectType: { type: String, enum: Object.values(SELECT_TYPES) },
@@ -75,7 +78,6 @@ ProductSchema.pre('save', async function () {
 });
 
 // --------------------------> METHODS <------------------------------
-
 
 const Product = mongoose.model('Product', ProductSchema);
 
