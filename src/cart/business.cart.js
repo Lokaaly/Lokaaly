@@ -3,19 +3,24 @@ const { Product } = require('../models/model.product');
 
 exports.getCartData = async (customerId) => {
 	const cartProducts = await CartProduct.find({ customerId }).lean();
+	
+
 	if (cartProducts && Array.isArray(cartProducts)) {
 		for (let i = 0; i < cartProducts.length; i++) {
 			const cartProd = cartProducts[i];
 			const currentProd = await Product.findById(cartProd.productId.toString()).lean();
 
-			cartProd.addons.forEach((cartAd, cartAdI) => {
+			const filteredAddons = [];
+
+			cartProd.addons.forEach((cartAd) => {
 				const updatedCartAd = currentProd.addons.find(currAd => cartAd._id.toString() === currAd._id.toString());
 				if (updatedCartAd) {
-					const filteredOptions = [];
-					updatedCartAd.options = updatedCartAd.options.filter(op => cartAd.includes(_id.toString()));
+					updatedCartAd.options = updatedCartAd.options.filter(op => cartAd.options.includes(op._id.toString()));
+					filteredAddons.push(updatedCartAd);
 				}
 			});
-			cartProducts[i].product = currentProd;
+			cartProducts[i].addons = filteredAddons;
+			cartProducts[i].productInfo = currentProd;
 		}
 	}
 	return cartProducts;

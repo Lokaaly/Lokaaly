@@ -16,7 +16,7 @@ router.post('/', VendorAuth, uploader().array('images'), wrapAsync(productContro
 router.put('/', VendorAuth, uploader().array('$pushImages'), wrapAsync(productController.updateProduct));
 router.delete('/:id', VendorAuth, wrapAsync(productController.removeProduct));
 
-router.get('/favourites', CustomerAuth, wrapAsync(productController.getFavouriteProductList));
+router.get('/favourites/list', CustomerAuth, wrapAsync(productController.getFavouriteProductList));
 router.put('/favourites/:id', CustomerAuth, wrapAsync(productController.setFavouriteProduct));
 
 module.exports = router;

@@ -152,7 +152,7 @@
 *    '200':
 *     description: Successful operation
 *
-* /products/favourites:
+* /products/favourites/list:
 *  get:
 *   tags:
 *    - 'product'

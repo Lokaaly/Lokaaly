@@ -18,7 +18,6 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-	debugger;
 	const data = { ...req.body };
 	if (req.file && req.file.fieldname === 'avatar') data.avatar = req.file;
 	const userId = req.user._id;

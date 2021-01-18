@@ -30,7 +30,7 @@ exports.addProduct = async (vendorId, data) => {
 		const fileName = splParts[0];
 		const url = await uploadFileInS3(vendorId, ROLES.VENDOR, fileName, fileExt, file.buffer);
 		return { url };
-	}))
+	}));
 	const product = new Product({ vendorId, ...data, images });
 	const creatResult = await product.save();
 	return creatResult;
@@ -79,8 +79,9 @@ exports.removeProduct = async (vendorId) => {
 	return deleteResult;
 };
 
-exports.getFavourites = async (customer) => {
-	return customer.lean().favourites;
+exports.getFavourites = async (customerId) => {
+	const result = await User.findById(customerId).populate('favourites').lean();
+	return result.favourites;
 };
 
 exports.setUnsetFavourite = async (customer, productId) => {
