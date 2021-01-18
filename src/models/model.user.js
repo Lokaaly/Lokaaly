@@ -45,12 +45,12 @@ const VendorSchema = new Schema({
 const shippingAddressSchema = new Schema({
 	firstName: String,
 	lastName: String,
-	city: String,
-	state: String,
-	address1: String,
-	address2: String,
-	zip: String,
 	phoneNumber: String,
+	latitude: Number,
+	longitude: Number,
+	formatedAddress: String,
+	houseFlat: String,
+	zip: String,
 	isPrimary: {
 		type: Boolean,
 		default: true,

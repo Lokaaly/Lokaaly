@@ -1,3 +1,5 @@
+
+
 /**
 * 	@swagger
 *
@@ -60,22 +62,27 @@
 *      type: string
 *     lastName:
 *      type: string
-*     city:
+*     phoneNumber:
 *      type: string
-*     state:
+*     latitude:
 *      type: string
-*     address1:
+*     longitude:
 *      type: string
-*     address2:
+*     formatedAddress:
+*      type: string
+*     houseFlat:
 *      type: string
 *     zip:
 *      type: string
-*     phoneNumber:
-*      type: string
 *    required:
-*     - "city"
-*     - "address1"
+*     - "firstName"
+*     - "lastName"
 *     - "phoneNumber"
+*     - "latitude"
+*     - "longitude"
+*     - "formatedAddress"
+*     - "houseFlat"
+*     - "zip"
 *
 *   UpdateShippingAddressDTO:
 *    type: object
@@ -86,17 +93,17 @@
 *      type: string
 *     lastName:
 *      type: string
-*     city:
+*     phoneNumber:
 *      type: string
-*     state:
+*     latitude:
 *      type: string
-*     address1:
+*     longitude:
 *      type: string
-*     address2:
+*     formatedAddress:
+*      type: string
+*     houseFlat:
 *      type: string
 *     zip:
-*      type: string
-*     phoneNumber:
 *      type: string
 *    required:
 *     - "_id"

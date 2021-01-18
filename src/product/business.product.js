@@ -79,6 +79,10 @@ exports.removeProduct = async (vendorId) => {
 	return deleteResult;
 };
 
+exports.getFavourites = async (customer) => {
+	return customer.lean().favourites;
+};
+
 exports.setUnsetFavourite = async (customer, productId) => {
 	const exProduct = await Product.findById(productId);
 	if (!exProduct) throw new Error(MS.PRODUCT.INVALID);

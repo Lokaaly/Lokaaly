@@ -5,9 +5,17 @@ exports.getCartData = async (customerId) => {
 	const cartProducts = await CartProduct.find({ customerId }).lean();
 	if (cartProducts && Array.isArray(cartProducts)) {
 		for (let i = 0; i < cartProducts.length; i++) {
-			debugger;
-			const currentProduct = await Product.findById(cartProducts[i].productId.toString()).lean();
-			cartProducts[i].product = currentProduct;
+			const cartProd = cartProducts[i];
+			const currentProd = await Product.findById(cartProd.productId.toString()).lean();
+
+			cartProd.addons.forEach((cartAd, cartAdI) => {
+				const updatedCartAd = currentProd.addons.find(currAd => cartAd._id.toString() === currAd._id.toString());
+				if (updatedCartAd) {
+					const filteredOptions = [];
+					updatedCartAd.options = updatedCartAd.options.filter(op => cartAd.includes(_id.toString()));
+				}
+			});
+			cartProducts[i].product = currentProd;
 		}
 	}
 	return cartProducts;

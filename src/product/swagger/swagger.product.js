@@ -135,7 +135,7 @@
 /**
 * 	@swagger
 *
-* /products/favourite/{id}:
+* /products/favourites/{id}:
 *  put:
 *   tags:
 *    - 'product'
@@ -148,6 +148,16 @@
 *      schema:
 *       type: string
 *      description: Set or Unset favourite product
+*   responses:
+*    '200':
+*     description: Successful operation
+*
+* /products/favourites:
+*  get:
+*   tags:
+*    - 'product'
+*   security:
+*    - bearerAuth: []
 *   responses:
 *    '200':
 *     description: Successful operation
