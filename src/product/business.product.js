@@ -3,11 +3,12 @@ const { MS } = require('../custom.errors');
 const { uploadFileInS3 } = require('../helpers/s3_uploader');
 const { ROLES, VENDOR_REQ_STEPS } = require('../models/static.data');
 const { User } = require('../models/model.user');
+const escapeStringRegexp = require('escape-string-regexp');
 const { deleteFileFromS3 } = require('../helpers/s3_lib');
 
 exports.getProductsList = async (filter) => {
 	const {
-		skip = 0, limit = 10, vendorId, categoryId,
+		search, skip = 0, limit = 10, vendorId, categoryId,
 		prepRange, priceRange, sort
 	} = filter || {};
 	const query = { active: true };
@@ -20,14 +21,19 @@ exports.getProductsList = async (filter) => {
 	if (categoryId) query.categoryId = categoryId;
 	if (priceRange) {
 		const [minPrice, maxPrice] = priceRange.split('-');
-		if (minPrice && minPrice >=0 && maxPrice && maxPrice > minPrice) {
+		if (minPrice && minPrice >= 0 && maxPrice && maxPrice > minPrice) {
 			query.price = { $gte: minPrice };
 			query.price = { $lte: maxPrice };
 		}
 	}
+	if (search) {
+		const $regex = escapeStringRegexp(search);
+		query.title = { $regex };
+	}
+
 	if (prepRange) {
 		const [minPrep, maxPrep] = prepRange.split('-');
-		if (minPrep && minPrep >=0 && maxPrep && maxPrep > minPrep) {
+		if (minPrep && minPrep >= 0 && maxPrep && maxPrep > minPrep) {
 			query.prepTime = { $gte: minPrep };
 			query.prepTime = { $lte: maxPrep };
 		}

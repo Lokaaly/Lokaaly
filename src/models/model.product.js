@@ -75,6 +75,8 @@ const ProductSchema = new Schema({
 	timestamps: true,
 });
 
+ProductSchema.index({ name: 'text', 'title': 'text'});
+
 // ------------> HOOKS <---------------
 ProductSchema.pre('save', async function () {
 	let product = this;

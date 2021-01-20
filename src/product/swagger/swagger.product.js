@@ -6,6 +6,11 @@
 *    - 'product'
 *   parameters:
 *    - in: query
+*      name: search
+*      description: 'Search products by title'
+*      schema:
+*       type: string
+*    - in: query
 *      name: skip
 *      schema:
 *       type: integer
