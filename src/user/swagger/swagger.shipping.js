@@ -72,8 +72,6 @@
 *      type: string
 *     houseFlat:
 *      type: string
-*     zip:
-*      type: string
 *    required:
 *     - "firstName"
 *     - "lastName"
@@ -82,7 +80,6 @@
 *     - "longitude"
 *     - "formatedAddress"
 *     - "houseFlat"
-*     - "zip"
 *
 *   UpdateShippingAddressDTO:
 *    type: object
@@ -102,8 +99,6 @@
 *     formatedAddress:
 *      type: string
 *     houseFlat:
-*      type: string
-*     zip:
 *      type: string
 *    required:
 *     - "_id"

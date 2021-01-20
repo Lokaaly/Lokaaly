@@ -17,6 +17,25 @@
 *      name: vendorId
 *      schema:
 *       type: string
+*    - in: query
+*      name: categoryId
+*      schema:
+*       type: string
+*    - in: query
+*      name: prepRange
+*      description: 'Example: <b>10-20</b> (in minute)'
+*      schema:
+*       type: string
+*    - in: query
+*      name: priceRange
+*      description: 'Example: <b>0-100</b>'
+*      schema:
+*       type: string
+*    - in: query
+*      name: sort
+*      schema:
+*       type: string
+*      description: 'Valid sort types - priceAsc, priceDesc, prepAsc, prepDesc'
 *   summary: Retrieve products with filter
 *   responses:
 *    '200':
@@ -42,6 +61,8 @@
 *          format: binary
 *        title:
 *         type: string
+*        prepTime:
+*         type: integer
 *        description:
 *         type: string
 *        price:
@@ -88,6 +109,8 @@
 *        description:
 *         type: string
 *        price:
+*         type: integer
+*        prepTime:
 *         type: integer
 *        addons:
 *         type: string

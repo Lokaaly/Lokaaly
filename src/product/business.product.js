@@ -1,4 +1,4 @@
-const { Product } = require('../models/model.product');
+const { Product, SORT_TYPES } = require('../models/model.product');
 const { MS } = require('../custom.errors');
 const { uploadFileInS3 } = require('../helpers/s3_uploader');
 const { ROLES, VENDOR_REQ_STEPS } = require('../models/static.data');
@@ -6,7 +6,10 @@ const { User } = require('../models/model.user');
 const { deleteFileFromS3 } = require('../helpers/s3_lib');
 
 exports.getProductsList = async (filter) => {
-	const { skip = 0, limit = 10, vendorId } = filter || {};
+	const {
+		skip = 0, limit = 10, vendorId, categoryId,
+		prepRange, priceRange, sort
+	} = filter || {};
 	const query = { active: true };
 
 	if (vendorId) {
@@ -14,7 +17,30 @@ exports.getProductsList = async (filter) => {
 		if (!exVendor || exVendor.vendor.activeStep !== VENDOR_REQ_STEPS.ACTIVATED) throw new Error(MS.VENDOR.INVALID);
 		query.vendorId = vendorId;
 	}
-	const products = await Product.find(query).skip(+skip).limit(+limit).lean();
+	if (categoryId) query.categoryId = categoryId;
+	if (priceRange) {
+		const [minPrice, maxPrice] = priceRange.split('-');
+		if (minPrice && minPrice >=0 && maxPrice && maxPrice > minPrice) {
+			query.price = { $gte: minPrice };
+			query.price = { $lte: maxPrice };
+		}
+	}
+	if (prepRange) {
+		const [minPrep, maxPrep] = prepRange.split('-');
+		if (minPrep && minPrep >=0 && maxPrep && maxPrep > minPrep) {
+			query.prepTime = { $gte: minPrep };
+			query.prepTime = { $lte: maxPrep };
+		}
+	}
+	let productsPromise = Product.find(query);
+
+	if (sort && SORT_TYPES[sort]) {
+		productsPromise.sort(SORT_TYPES[sort]);
+	}
+	const products = await productsPromise
+		.skip(+skip)
+		.limit(+limit)
+		.lean();
 	return products;
 };
 

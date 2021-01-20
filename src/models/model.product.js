@@ -10,6 +10,13 @@ const SELECT_TYPES = {
 	CHECKBOX: 'checkbox'
 };
 
+const SORT_TYPES = {
+	'priceAsc': { price: 'asc' },
+	'priceDesc': { price: 'desc' },
+	'prepAsc':  { prepTime: 'asc' },
+	'prepDesc': { prepTime: 'desc' },
+};
+
 // ----------------->> Product SCHEMA <<----------------------------------
 const ProductSchema = new Schema({
 	vendorId: {
@@ -46,6 +53,7 @@ const ProductSchema = new Schema({
 		name: String,
 		description: String
 	})],
+	prepTime: Number,
 	addons: [new Schema({
 		title: String,
 		selectType: { type: String, enum: Object.values(SELECT_TYPES) },
@@ -83,4 +91,5 @@ const Product = mongoose.model('Product', ProductSchema);
 
 module.exports = {
 	Product,
+	SORT_TYPES,
 };

@@ -50,7 +50,6 @@ const shippingAddressSchema = new Schema({
 	longitude: Number,
 	formatedAddress: String,
 	houseFlat: String,
-	zip: String,
 	isPrimary: {
 		type: Boolean,
 		default: true,
