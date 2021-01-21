@@ -38,7 +38,7 @@ const ProductSchema = new Schema({
 		required: true
 	},
 	price: {
-		type: Number,
+		type: mongoose.Types.Decimal128,
 		required: true,
 	},
 	currency: {
@@ -60,7 +60,7 @@ const ProductSchema = new Schema({
 		options: [new Schema({
 			name: { type: String, required: true },
 			price: {
-				type: Number,
+				type: mongoose.Types.Decimal128,
 				default: 0
 			}
 		})]
@@ -75,8 +75,6 @@ const ProductSchema = new Schema({
 	timestamps: true,
 });
 
-ProductSchema.index({ name: 'text', 'title': 'text'});
-
 // ------------> HOOKS <---------------
 ProductSchema.pre('save', async function () {
 	let product = this;
@@ -90,7 +88,7 @@ ProductSchema.pre('save', async function () {
 // --------------------------> METHODS <------------------------------
 
 const Product = mongoose.model('Product', ProductSchema);
-
+Product.ensureIndexes({ title: 'text' });
 module.exports = {
 	Product,
 	SORT_TYPES,

@@ -14,28 +14,30 @@ exports.getProductsList = async (filter) => {
 	const query = { active: true };
 
 	if (vendorId) {
-		const exVendor = await User.findOne({ _id: vendorId, role: ROLES.VENDOR });
+		const exVendor = await User.findOne({ _id: vendorId, role: ROLES.VENDOR, });
 		if (!exVendor || exVendor.vendor.activeStep !== VENDOR_REQ_STEPS.ACTIVATED) throw new Error(MS.VENDOR.INVALID);
 		query.vendorId = vendorId;
 	}
 	if (categoryId) query.categoryId = categoryId;
 	if (priceRange) {
-		const [minPrice, maxPrice] = priceRange.split('-');
-		if (minPrice && minPrice >= 0 && maxPrice && maxPrice > minPrice) {
-			query.price = { $gte: minPrice };
-			query.price = { $lte: maxPrice };
+		const priceParts = priceRange.split('-');
+		const minPrice = +priceParts[0];
+		const maxPrice = +priceParts[1];
+		if (minPrice && minPrice >= 0 && maxPrice && maxPrice >= minPrice) {
+			query.price = { $gte: minPrice, $lte: maxPrice };
 		}
 	}
 	if (search) {
-		const $regex = escapeStringRegexp(search);
-		query.title = { $regex };
+		const escapedString  = escapeStringRegexp(search);
+		query.title = { $regex: new RegExp(escapedString, 'i')};
 	}
 
 	if (prepRange) {
-		const [minPrep, maxPrep] = prepRange.split('-');
-		if (minPrep && minPrep >= 0 && maxPrep && maxPrep > minPrep) {
-			query.prepTime = { $gte: minPrep };
-			query.prepTime = { $lte: maxPrep };
+		const prepParts = prepRange.split('-');
+		const minPrep = +prepParts[0];
+		const maxPrep = +prepParts[1];
+		if (minPrep && minPrep >= 0 && maxPrep && maxPrep >= minPrep) {
+			query.prepTime = { $gte: minPrep, $lte: maxPrep };
 		}
 	}
 	let productsPromise = Product.find(query);
