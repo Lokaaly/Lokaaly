@@ -204,6 +204,8 @@ UserSchema.methods.userInfoResponse = function () {
 const User = mongoose.model('User', UserSchema, 'users');
 const Admin = mongoose.model('Admin', AdminSchema, 'users');
 
+User.ensureIndexes({ 'vendor.businessName': 'text' });
+
 module.exports = {
 	User,
 	Admin,

@@ -92,6 +92,10 @@
 *      name: limit
 *      schema:
 *       type: integer
+*    - in: query
+*      name: search
+*      schema:
+*       type: string
 *   responses:
 *    '200':
 *     description: Successful operation

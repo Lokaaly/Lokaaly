@@ -89,6 +89,7 @@ ProductSchema.pre('save', async function () {
 
 const Product = mongoose.model('Product', ProductSchema);
 Product.ensureIndexes({ title: 'text' });
+
 module.exports = {
 	Product,
 	SORT_TYPES,

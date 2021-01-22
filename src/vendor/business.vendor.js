@@ -3,6 +3,7 @@ const { USER_STATUSES, ROLES} = require('../models/static.data');
 const { MS } = require('../custom.errors');
 const { deleteFileFromS3 } = require('../helpers/s3_lib');
 const { uploadFileInS3 } = require('../helpers/s3_uploader');
+const escapeStringRegexp = require('escape-string-regexp');
 
 exports.sendRequestForVendorRegistration = async (vendorRequest) => {
 	const { license } = vendorRequest.vendor;
@@ -41,8 +42,12 @@ exports.updateVendorPassword = async (user, password) => {
 };
 
 exports.getVendors = async (filter) => {
-	const { skip = 0, limit = 10 } = filter || {};
+	const { skip = 0, limit = 10, search } = filter || {};
 	const query = { role: ROLES.VENDOR, status: USER_STATUSES.VERIFIED };
+	if (search) {
+		const escapedString  = escapeStringRegexp(search);
+		query['vendor.businessName'] = { $regex: new RegExp(escapedString, 'i')};
+	}
 	const vendorsList = await User.find(query).skip(+skip).limit(+limit).lean();
 	return vendorsList;
 };
