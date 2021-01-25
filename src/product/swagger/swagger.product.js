@@ -70,6 +70,8 @@
 *         type: integer
 *        description:
 *         type: string
+*        dietaryType:
+*         type: string
 *        price:
 *         type: integer
 *        addons:
@@ -117,6 +119,8 @@
 *         type: integer
 *        prepTime:
 *         type: integer
+*        dietaryType:
+*         type: string
 *        addons:
 *         type: string
 *         description: 'Provide modified addons array'

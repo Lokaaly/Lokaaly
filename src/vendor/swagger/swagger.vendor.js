@@ -203,3 +203,34 @@
 *    bearerFormat: JWT
 *
 */
+
+/**
+* 	@swagger
+*
+* /vendors/favourites/{id}:
+*  put:
+*   tags:
+*    - 'vendors'
+*   security:
+*    - bearerAuth: []
+*   parameters:
+*    - in: path
+*      name: id
+*      required: true
+*      schema:
+*       type: string
+*      description: Set or Unset favourite vendor
+*   responses:
+*    '200':
+*     description: Successful operation
+*
+* /vendors/favourites/list:
+*  get:
+*   tags:
+*    - 'vendors'
+*   security:
+*    - bearerAuth: []
+*   responses:
+*    '200':
+*     description: Successful operation
+*/

@@ -111,6 +111,7 @@ const UserSchema = new Schema({
 	city: String,
 	
 	favourites: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+	favouriteVendors: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 	vendor: VendorSchema,
 }, {
 	versionKey: false,

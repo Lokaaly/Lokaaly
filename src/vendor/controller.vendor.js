@@ -34,3 +34,13 @@ exports.updateVendor = async (req, res) => {
 	const files = req.files; // $pushImages, profileImage
 	return await businessVendor.updateVendor(vendor, data, files);
 };
+
+exports.getFavouriteVendorList = async (req, res) => {
+	const { _id } = req.user;
+	return await businessVendor.getFavourites(_id);
+};
+
+exports.setFavouriteVendor = async (req, res) => {
+	const { id: vendorId } = req.params;
+	return await businessVendor.setUnsetFavourite(req.user, vendorId);
+};

@@ -7,6 +7,8 @@ const { uploader } = require('../middlewares/multer');
 const { ROLES } = require('../models/static.data');
 
 const vendorAuth = AuthMiddleware([ROLES.VENDOR]);
+const customerAuth = AuthMiddleware([ROLES.CUSTOMER]);
+
 // /api/vendors
 router.post('/send-request', uploader().single('license'), wrapAsync(vendorController.vendorRequest));
 router.put('/password', vendorAuth, wrapAsync(vendorController.updatePassword));
@@ -19,5 +21,8 @@ router.get('/:id', wrapAsync(vendorController.getVendorById));
 router.put('/', vendorAuth,
 	uploader().fields([{ name: '$pushImages', maxCount: 10 }, { name: 'profileImage', maxCount: 1 }, { name: 'license', maxCount: 1 }]),
 	wrapAsync(vendorController.updateVendor));
+
+router.get('/favourites/list', customerAuth, wrapAsync(vendorController.getFavouriteVendorList));
+router.put('/favourites/:id', customerAuth, wrapAsync(vendorController.setFavouriteVendor));
 
 module.exports = router;

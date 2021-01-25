@@ -124,3 +124,25 @@ exports.updateVendor = async (currentVendor, body, files) => {
 	delete updData.password;
 	return updData;
 };
+
+exports.getFavourites = async (customerId) => {
+	const result = await User.findById(customerId).populate('favouriteVendors').lean();
+	return result.favouriteVendors;
+};
+
+exports.setUnsetFavourite = async (customer, vendorId) => {
+	const exVendor = await User.findOne({ _id: vendorId, role: ROLES.VENDOR });
+	if (!exVendor) throw new Error(MS.VENDOR.INVALID);
+
+	let setFavourite = true;
+	
+	let favIndex = customer.favouriteVendors.indexOf(vendorId);
+	if (favIndex === -1) customer.favouriteVendors.push(vendorId);
+	else {
+		customer.favouriteVendors.splice(favIndex, 1);
+		setFavourite = false;
+	}
+
+	const response = await customer.save();
+	return { favouriteVendors: response.favouriteVendors, isSetFavourite: setFavourite };
+};

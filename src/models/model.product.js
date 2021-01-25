@@ -17,6 +17,14 @@ const SORT_TYPES = {
 	'prepDesc': { prepTime: 'desc' },
 };
 
+const DIETART_TYPES = {
+	GL_FREEL: 'Gluten Free',
+	HEALTHY: 'Healthy',
+	ORGANIC: 'Organic',
+	VEGAN: 'Vegan',
+	VEGETARIAN: 'Vegetarian'
+};
+
 // ----------------->> Product SCHEMA <<----------------------------------
 const ProductSchema = new Schema({
 	vendorId: {
@@ -32,6 +40,9 @@ const ProductSchema = new Schema({
 	title: {
 		type: String,
 		required: true
+	},
+	dietaryType: {
+		type: String,
 	},
 	description: {
 		type: String,
