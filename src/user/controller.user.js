@@ -36,8 +36,8 @@ exports.updateShippingAddress = async (req, res) => {
 
 exports.removeShippingAddress = async (req, res) => {
 	const addressId = req.params.id;
-	const userId = req.user._id;
-	return businessUser.removeShippingAddress(userId, addressId);
+	const user = req.user; //._id;
+	return businessUser.removeShippingAddress(user, addressId);
 };
 
 // ------------------- RESET PASSWORD --------------------

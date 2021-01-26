@@ -51,6 +51,11 @@ exports.updateProfile = async (userId, data) => {
 
 // CUSTOMER SHIPPING ADDRESSES
 exports.addShippingAddress = async (user, data) => {
+	user.shippingAddresses.forEach((sa, saInd) => {
+		if (sa.isPrimary && data.isPrimary) {
+			user.shippingAddresses[saInd].isPrimary = false;
+		}
+	});
 	user.shippingAddresses.push(data);
 	const updatedDoc = await user.save();
 	return updatedDoc;
@@ -63,12 +68,21 @@ exports.updateShippingAddress = async (user, updateData) => {
 			const updatedAddress = { ...address.toJSON(), ...updateData };
 			user.shippingAddresses[i] = updatedAddress;
 		}
+		if (updateData.isPrimary && address.isPrimary) {
+			user.shippingAddresses[i].isPrimary = false;
+		}
 	});
 	return await user.save();
 };
 
-exports.removeShippingAddress = async (userId, addressId) => {
-	return await User.findOneAndUpdate({ _id: userId }, { $pull: { shippingAddresses: { _id: addressId } } }, { new: true });
+exports.removeShippingAddress = async (user, addressId) => {
+	let removedPrimaryAddress = false;
+	user.shippingAddresses = user.shippingAddresses.filter(sa => {
+		if (sa._id.toString() === addressId && sa.isPrimary === true) removedPrimaryAddress = true;
+			return sa._id.toString() !== addressId;
+	});
+	if (removedPrimaryAddress && user.shippingAddresses && user.shippingAddresses.length > 0) user.shippingAddresses[0].isPrimary = true;
+	return await user.save();
 };
 
 exports.facebookSignIn = async (data) => {

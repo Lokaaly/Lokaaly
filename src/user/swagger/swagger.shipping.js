@@ -72,6 +72,8 @@
 *      type: string
 *     houseFlat:
 *      type: string
+*     isPrimary:
+*      type: boolean
 *    required:
 *     - "firstName"
 *     - "lastName"
@@ -100,6 +102,8 @@
 *      type: string
 *     houseFlat:
 *      type: string
+*     isPrimary:
+*      type: boolean
 *    required:
 *     - "_id"
 */
