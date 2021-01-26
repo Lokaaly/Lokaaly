@@ -95,7 +95,6 @@
 *    - 'admin'
 *   security:
 *    - bearerAuth: []
-
 *   requestBody:
 *    content:
 *     multipart/form-data:
@@ -125,7 +124,6 @@
 *      name: id
 *      schema:
 *       type: string
-*       required: true
 *   requestBody:
 *    content:
 *     multipart/form-data:
@@ -137,9 +135,6 @@
 *        image:
 *         type: string
 *         format: binary
-*       required:
-*        - "name"
-*        - "image"
 *   responses:
 *    '200':
 *     description: Successful operation

@@ -8,8 +8,8 @@ const { deleteFileFromS3 } = require('../helpers/s3_lib');
 
 exports.getProductsList = async (filter) => {
 	const {
-		search, skip = 0, limit = 10, vendorId, categoryId,
-		prepRange, priceRange, sort
+search, skip = 0, limit = 10, vendorId, categoryId, dietaryType,
+		prepRange, priceRange, sort,
 	} = filter || {};
 	const query = { active: true };
 
@@ -27,6 +27,7 @@ exports.getProductsList = async (filter) => {
 			query.price = { $gte: minPrice, $lte: maxPrice };
 		}
 	}
+	if (dietaryType) query.dietaryType = dietaryType;
 	if (search) {
 		const escapedString  = escapeStringRegexp(search);
 		query.title = { $regex: new RegExp(escapedString, 'i')};

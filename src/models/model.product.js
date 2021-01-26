@@ -18,11 +18,11 @@ const SORT_TYPES = {
 };
 
 const DIETART_TYPES = {
-	GL_FREEL: 'Gluten Free',
-	HEALTHY: 'Healthy',
-	ORGANIC: 'Organic',
-	VEGAN: 'Vegan',
-	VEGETARIAN: 'Vegetarian'
+	GL_FREE: 'gl_free',
+	HEALTHY: 'healthy',
+	ORGANIC: 'organic',
+	VEGAN: 'vegan',
+	VEGETARIAN: 'vegetarian'
 };
 
 // ----------------->> Product SCHEMA <<----------------------------------
@@ -43,6 +43,7 @@ const ProductSchema = new Schema({
 	},
 	dietaryType: {
 		type: String,
+		enum: Object.values(DIETART_TYPES).values
 	},
 	description: {
 		type: String,

@@ -26,8 +26,11 @@ exports.addCategory = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
 	const { id } = req.params;
-	const { name } = req.body;
-	const updatedData = { image: req.file, name };
+	const { name } = req.body || {};
+	let updatedData = {};
+	if (req.file) updatedData.image = req.file;
+	if (name) updatedData.name = name;
+
 	return await businessAdmin.updateCategory(id, updatedData);
 };
 
