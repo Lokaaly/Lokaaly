@@ -20,7 +20,7 @@ exports.getCartData = async (customerId) => {
 				}
 			});
 			cartProducts[i].addons = filteredAddons;
-			cartProducts[i].productInfo = currentProd;
+			cartProducts[i].productInfo = await Product.findById(currentProd._id.toString()).lean();
 		}
 	}
 	return cartProducts;
