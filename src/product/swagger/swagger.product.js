@@ -23,6 +23,10 @@
 *      schema:
 *       type: string
 *    - in: query
+*      name: dietaryTypes
+*      schema:
+*       type: string
+*    - in: query
 *      name: categoryId
 *      schema:
 *       type: string
