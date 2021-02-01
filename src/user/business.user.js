@@ -67,8 +67,7 @@ exports.updateShippingAddress = async (user, updateData) => {
 		if (address._id.toString() === updateData._id) {
 			const updatedAddress = { ...address.toJSON(), ...updateData };
 			user.shippingAddresses[i] = updatedAddress;
-		}
-		if (updateData.isPrimary && address.isPrimary) {
+		} else if (updateData.isPrimary === true && address.isPrimary === true) {
 			user.shippingAddresses[i].isPrimary = false;
 		}
 	});
