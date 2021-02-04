@@ -25,14 +25,13 @@ exports.getCartData = async (customerId) => {
 		}
 	}
 
-	
-
+	const groupedByVendor = [];
 	const groupedCartProducts = _.groupBy(cartProducts, (cp) => cp.productInfo.vendorId);
-	await Promise.all(Object.keys(groupedCartProducts).map((vId)=> {
+	await Promise.all(Object.keys(groupedCartProducts).map(async (vId)=> {
 		const vendorData = await User.findById(vId).select('vendor').lean();
-		
+		groupedByVendor.push({...vendorData, cart: [...groupedCartProducts[vId]]});
 	}));
-	return groupedCartProducts;
+	return groupedByVendor;
 };
 
 exports.addToCart = async (customerId, data) => {
