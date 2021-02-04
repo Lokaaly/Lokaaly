@@ -4,6 +4,7 @@ const vendorRoutes = require('./vendor/routes.vendor');
 const productRoutes = require('./product/routes.product');
 const cartRoutes = require('./cart/routes.cart');
 const staticRoutes = require('./static/routes.static');
+const orderRoutes = require('./order/routes.order');
 
 module.exports = [{
 	path: 'users',
@@ -23,5 +24,7 @@ module.exports = [{
 }, {
 	path: 'cart',
 	router: cartRoutes
-}
-];
+}, {
+	path:'orders',
+	router: orderRoutes
+}];

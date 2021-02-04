@@ -1,10 +1,11 @@
 const { CartProduct } = require('../models/model.card');
 const { Product } = require('../models/model.product');
+const _ = require('lodash');
+const { User } = require('../models/model.user');
 
 exports.getCartData = async (customerId) => {
 	const cartProducts = await CartProduct.find({ customerId }).lean();
 	
-
 	if (cartProducts && Array.isArray(cartProducts)) {
 		for (let i = 0; i < cartProducts.length; i++) {
 			const cartProd = cartProducts[i];
@@ -23,7 +24,15 @@ exports.getCartData = async (customerId) => {
 			cartProducts[i].productInfo = await Product.findById(currentProd._id.toString()).lean();
 		}
 	}
-	return cartProducts;
+
+	
+
+	const groupedCartProducts = _.groupBy(cartProducts, (cp) => cp.productInfo.vendorId);
+	await Promise.all(Object.keys(groupedCartProducts).map((vId)=> {
+		const vendorData = await User.findById(vId).select('vendor').lean();
+		
+	}));
+	return groupedCartProducts;
 };
 
 exports.addToCart = async (customerId, data) => {
