@@ -40,6 +40,8 @@ const VendorSchema = new Schema({
 		enum: Object.values(VENDOR_REQ_STEPS),
 		default: VENDOR_REQ_STEPS.REQUESTED,
 	}
+}, {
+	_id: false
 });
 
 const shippingAddressSchema = new Schema({
