@@ -50,7 +50,7 @@ const ProductSchema = new Schema({
 		required: true
 	},
 	price: {
-		type: mongoose.Types.Decimal128,
+		type: String,
 		required: true,
 	},
 	currency: {
@@ -72,8 +72,8 @@ const ProductSchema = new Schema({
 		options: [new Schema({
 			name: { type: String, required: true },
 			price: {
-				type: mongoose.Types.Decimal128,
-				default: 0
+				type: String,
+				default: '0'
 			}
 		})]
 	})],

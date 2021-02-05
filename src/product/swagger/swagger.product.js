@@ -79,10 +79,10 @@
 *        dietaryType:
 *         type: string
 *        price:
-*         type: integer
+*         type: string
 *        addons:
 *         type: string
-*         default: [{"title": "Souces","selectType": "checkbox","options": [{"name":"Cheese","price": 1}]}]
+*         default: [{"title": "Souces","selectType": "checkbox","options": [{"name":"Cheese","price": "1"}]}]
 *       required:
 *        - "categoryId"
 *        - "title"
@@ -122,7 +122,7 @@
 *        description:
 *         type: string
 *        price:
-*         type: integer
+*         type: string
 *        prepTime:
 *         type: integer
 *        dietaryType:
