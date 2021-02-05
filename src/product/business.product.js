@@ -60,7 +60,7 @@ exports.getProduct = async (id) => {
 
 exports.addProduct = async (vendorId, data) => {
 	const images = await Promise.all(data.images.map(async (file) => {
-		const splParts = file.originalname.split('.');d
+		const splParts = file.originalname.split('.');
 		const fileExt = splParts[splParts.length - 1];
 		const fileName = splParts[0];
 		const url = await uploadFileInS3(vendorId, ROLES.VENDOR, fileName, fileExt, file.buffer);
