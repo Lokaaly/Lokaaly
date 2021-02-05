@@ -55,7 +55,7 @@ const ProductSchema = new Schema({
 	},
 	currency: {
 		type: String,
-		default: 'USD'
+		default: 'AED'
 	},
 	active: {
 		type: Boolean,
@@ -98,7 +98,6 @@ ProductSchema.pre('save', async function () {
 });
 
 // --------------------------> METHODS <------------------------------
-
 const Product = mongoose.model('Product', ProductSchema);
 Product.ensureIndexes({ title: 'text' });
 
