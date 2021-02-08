@@ -1,80 +1,71 @@
 /**
 * 	@swagger
 *
-* /cart:
+* /orders:
 *  get:
 *   tags:
-*    - 'cart'
+*    - 'orders'
 *   security:
 *    - bearerAuth: []
-*   summary: 'Get customer cart data info'
+*   parameters:
+*    - in: query
+*      name: status
+*      description: 'Order statuses: pending, rejected, accepted, paid'
+*      schema:
+*       type: string
+*    - in: query
+*      name: skip
+*      schema:
+*       type: integer
+*    - in: query
+*      name: limit
+*      schema:
+*       type: integer
+*   summary: 'Get customer orders'
 *   responses:
 *    '200':
 *     description: Successful operation
 *
 *  post:
 *   tags:
-*    - 'cart'
+*    - 'orders'
 *   security:
 *    - bearerAuth: []
-*   summary: 'Add to cart'
+*   summary: 'Make an order'
 *   requestBody:
 *    content:
 *     application/json:
 *      schema:
-*       $ref: '#/components/schemas/AddToCartDTO'
-*   responses:
-*    '200':
-*     description: Successful operation
-*
-*  delete:
-*   tags:
-*    - 'cart'
-*   security:
-*    - bearerAuth: []
-*   parameters:
-*    - in: query
-*      name: productId
-*      schema:
-*       type: string
-*   summary: 'Clear cart'
+*       $ref: '#/components/schemas/Order_DTO'
 *   responses:
 *    '200':
 *     description: Successful operation
 *
 * components:
 *  schemas:
-*   AddToCartDTO:
+*   Order_DTO:
 *    type: object
 *    properties:
-*     productId:
-*      type: string
-*     addons:
+*     products:
 *      type: array
 *      items:
-*       $ref: '#/components/schemas/AddonDTO_AddToCart'
-*     size:
+*       type: object
+*       properties:
+*        productId:
+*         type: string
+*         summary: 'Provide product info details'
+*        addons:
+*         type: array
+*         items:
+*          type: object
+*        quantity:
+*         type: number
+*        orderDate:
+*         type: Date
+*        comment:
+*         type: string
+*     shippingAddressId:
 *      type: string
-*     quantity:
+*     paymentMethod:
 *      type: number
-*     comment:
-*      type: string
-*     orderDate:
-*      type: Date
-*    required:
-*     - "productId"
-*     - "quantity"
-*     - "orderDate"
-*
-*   AddonDTO_AddToCart:
-*    type: object
-*    properties:
-*     _id:
-*      type: string
-*      summary: 'Provide addon id'
-*     options:
-*      type: array
-*      items:
-*       type: string
-*       summary: 'Provide option ids'
 */

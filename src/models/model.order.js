@@ -9,7 +9,8 @@ const PAYMENT_METHODS = {
 const ORDER_STATUSES = {
 	PENDING: 'pending',
 	REJECTED: 'rejected',
-	ACCEPTED: 'accepted'
+	ACCEPTED: 'accepted',
+	PAID: 'paid'
 };
 
 const orderProductSchema = new Schema({
@@ -25,14 +26,19 @@ const orderProductSchema = new Schema({
 	orderDate: {
 		type: Schema.Types.Date
 	},
+	comment: String,
 	quantity: Number,
+	unitPrice: String
+}, {
+	_id: false
 });
 
 // ----------------->> Order SCHEMA <<----------------------------------
 const OrderSchema = new Schema({
-	orderId: {
-		type: Schema.Types.ObjectId,
-		required: true
+	orderNumber: {
+		type: String,
+		required: true,
+		unique: true
 	},
 	customerId: {
 		type: Schema.Types.ObjectId,
@@ -55,7 +61,10 @@ const OrderSchema = new Schema({
 	status: {
 		type: String,
 		enum: Object.values(ORDER_STATUSES)
-	}
+	},
+	shippingPrice: String,
+	subTotal: String,
+	total: String,
 }, {
 	versionKey: false,
 	timestamps: true,
@@ -65,4 +74,5 @@ const Orders = mongoose.model('Order', OrderSchema);
 
 module.exports = {
 	Orders,
+	ORDER_STATUSES
 };
