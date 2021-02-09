@@ -7,7 +7,8 @@ exports.getOrdersList = async (userId, filter) => {
 	if (status) {
 		query.status = status;
 	}
-	let ordersPromise = Orders.find(query);
+	let ordersPromise = Orders.find(query)
+		.populate('products.productId', ['_id', 'title', 'images']);
 	if (skip && limit) {
 		ordersPromise = ordersPromise.skip(+skip).limit(+limit);
 	}
