@@ -41,6 +41,23 @@
 *    '200':
 *     description: Successful operation
 *
+* /orders/{orderId}:
+*  get:
+*   tags:
+*    - 'orders'
+*   security:
+*    - bearerAuth: []
+*   parameters:
+*    - in: path
+*      name: orderId
+*      required: true
+*      schema:
+*       type: string
+*      description: Get order detail
+*   responses:
+*    '200':
+*     description: Successful operation
+*
 * components:
 *  schemas:
 *   Order_DTO:

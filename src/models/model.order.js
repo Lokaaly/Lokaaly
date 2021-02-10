@@ -42,11 +42,12 @@ const OrderSchema = new Schema({
 	},
 	customerId: {
 		type: Schema.Types.ObjectId,
-		ref: 'user',
+		ref: 'User',
 		required: true
 	},
 	vendorId: {
 		type: Schema.Types.ObjectId,
+		ref: 'User',
 		required: true
 	},
 	shippingAddressId: {

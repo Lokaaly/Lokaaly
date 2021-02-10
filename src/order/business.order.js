@@ -15,6 +15,15 @@ exports.getOrdersList = async (userId, filter) => {
 	return await ordersPromise.lean();
 };
 
+exports.getOrder = async (userId, orderId) => {
+	const query = { _id: orderId.toString(), customerId: userId.toString() };
+	
+	const order = await Orders.findOne(query)
+		.populate('products.productId')
+		.populate('vendorId', ['_id', 'vendor']).lean();
+	return order;
+};
+
 exports.makeOrder = async (userId, data) => {
 	const validatedOrder = await initializeOrderDTO(userId, data);
 	const order = new Orders(validatedOrder);

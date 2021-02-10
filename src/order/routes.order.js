@@ -9,6 +9,7 @@ const CustomerAuth = AuthMiddleware([ROLES.CUSTOMER]);
 
 // /api/orders
 router.get('/', CustomerAuth, wrapAsync(ordersController.getOrdersList));
+router.get('/:orderId', CustomerAuth, wrapAsync(ordersController.getOrderById));
 router.post('/', CustomerAuth, wrapAsync(ordersController.makeOrder));
 
 module.exports = router;
