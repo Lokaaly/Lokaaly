@@ -13,7 +13,7 @@ async function initializeOrderDTO(customerId, data) {
 	for (const currProd of pickedData.products) {
 		const exProd = await Product.findById(currProd.productId).lean();
 		if (!exProd || !exProd.active) throw new Error('Product is not found');
-		if (currentVendor && currentVendor !== exProd.vendorId) throw new Error('Invalid order. Mixed vendor product has been found');
+		if (currentVendor && currentVendor.toString() !== exProd.vendorId.toString()) throw new Error('Invalid order. Mixed vendor product has been found');
 		currentVendor = exProd.vendorId;
 		currProd.unitPrice = exProd.price;
 		pickedData.subTotal += +currProd.quantity * +exProd.price;
