@@ -13,6 +13,15 @@ exports.getVendorById = async (req, res) => {
 	return await businessAdmin.getVendorById(vendorId);
 };
 
+exports.getCustomers = async (req, res) => {
+	return await businessAdmin.getCustomers(req.query);
+};
+
+exports.getCustomerById = async (req, res) => {
+	const { customerId } = req.params;
+	return await businessAdmin.getCustomerById(customerId);
+};
+
 exports.activateVendor = async (req, res) => {
 	const { vendorId } = req.params;
 	return await businessAdmin.submitVendorRequest(vendorId);

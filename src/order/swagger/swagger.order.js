@@ -14,6 +14,16 @@
 *      schema:
 *       type: string
 *    - in: query
+*      name: vendorId
+*      description: 'Accepted roles - [admin]'
+*      schema:
+*       type: string
+*    - in: query
+*      name: customerId
+*      description: 'Accepted roles - [admin, vendor]'
+*      schema:
+*       type: string
+*    - in: query
 *      name: skip
 *      schema:
 *       type: integer
@@ -21,7 +31,7 @@
 *      name: limit
 *      schema:
 *       type: integer
-*   summary: 'Get customer orders'
+*   summary: 'Get customer orders - ROLES [admin, vendor, customer]'
 *   responses:
 *    '200':
 *     description: Successful operation
@@ -54,6 +64,7 @@
 *      schema:
 *       type: string
 *      description: Get order detail
+*   summary: 'Get order by id - ROLES [admin, vendor, customer]'
 *   responses:
 *    '200':
 *     description: Successful operation

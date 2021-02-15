@@ -26,6 +26,9 @@ const MS = {
 		INVALID: 'Invalid vendor!',
 		LOGIN_ERR: 'Provided vendor doesn\'t exist or is not active!' 
 	},
+	CUSTOMER: {
+		INVALID: 'Invalid customer!',
+	},
 	FORGET_PASS: {
 		INVALID_RESET_CODE: 'Password reset code is not valid!',
 		INVALID_REQUEST: 'Invalid request for reseting password!',

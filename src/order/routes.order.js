@@ -6,10 +6,14 @@ const { AuthMiddleware } = require('../middlewares/auth.middleware');
 const { ROLES } = require('../models/static.data');
 
 const CustomerAuth = AuthMiddleware([ROLES.CUSTOMER]);
+const VendorAuth = AuthMiddleware([ROLES.VENDOR]);
+const MultiAuth = AuthMiddleware([ROLES.ADMIN, ROLES.VENDOR, ROLES.CUSTOMER]);
 
 // /api/orders
-router.get('/', CustomerAuth, wrapAsync(ordersController.getOrdersList));
-router.get('/:orderId', CustomerAuth, wrapAsync(ordersController.getOrderById));
+router.get('/', MultiAuth, wrapAsync(ordersController.getOrdersList));
+router.get('/:orderId', MultiAuth, wrapAsync(ordersController.getOrderById));
 router.post('/', CustomerAuth, wrapAsync(ordersController.makeOrder));
+
+router.post('/action/:orderId', VendorAuth, wrapAsync(ordersController.orderAction));
 
 module.exports = router;
