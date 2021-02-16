@@ -27,6 +27,39 @@
 *    '200':
 *     description: Successful operation
 *
+*  put:
+*   tags:
+*    - 'cart'
+*   security:
+*    - bearerAuth: []
+*   summary: 'Update product in cart'
+*   parameters:
+*    - in: path
+*      name: cartProductId
+*      required: true
+*      schema:
+*       type: string
+*      description: Provide cart product id - _id
+*   requestBody:
+*    content:
+*     application/json:
+*      schema:
+*       type: object
+*       properties:
+*        orderDate:
+*         type: Date
+*        comment:
+*         type: string
+*        quantity:
+*         type: number
+*        addons:
+*         type: array
+*         items:
+*          type: object
+*   responses:
+*    '200':
+*     description: Successful operation
+*
 *  delete:
 *   tags:
 *    - 'cart'

@@ -64,6 +64,7 @@ const OrderSchema = new Schema({
 		enum: Object.values(ORDER_STATUSES)
 	},
 	shippingPrice: String,
+	addonsPrice: String,
 	subTotal: String,
 	total: String,
 }, {

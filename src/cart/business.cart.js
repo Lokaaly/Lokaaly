@@ -42,6 +42,12 @@ exports.addToCart = async (customerId, data) => {
 	return savedProd;
 };
 
+exports.updateProductCart = async (customerId, cartProductId, upData) => {
+	const pickedData = _.pick(upData, ['addons', 'comment', 'orderDate', 'quantity']);
+	const cartProduct = await CartProduct.findOneAndUpdate({ _id: cartProductId, customerId: customerId.toString()  }, { ...pickedData }).lean();
+	return cartProduct;
+};
+
 exports.remove = async (customerId, productCartId) => {
 	const removeQuery = { customerId };
 	if (productCartId) removeQuery._id = productCartId; // removed specified product from cart
