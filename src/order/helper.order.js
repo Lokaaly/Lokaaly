@@ -5,6 +5,7 @@ const _ = require('lodash');
 
 async function initializeOrderDTO(customerId, data) {
 	const pickedData = _.pick(data, ['products', 'shippingAddressId', 'paymentMethod']);
+	pickedData.addonsPrice = 0;
 	pickedData.subTotal = 0;
 	pickedData.shippingPrice = 15;
 	
@@ -15,17 +16,26 @@ async function initializeOrderDTO(customerId, data) {
 		if (!exProd || !exProd.active) throw new Error('Product is not found');
 		if (currentVendor && currentVendor.toString() !== exProd.vendorId.toString()) throw new Error('Invalid order. Mixed vendor product has been found');
 		currentVendor = exProd.vendorId;
+		await Promise.all(currProd.addons.map(async (currProdAd) => {
+				const matchedAddon = exProd.addons.find(exAd => exAd._id.toString() === currProdAd._id.toString());
+				if (matchedAddon) {
+					await Promise.all(currProdAd.options.map(currOp => {
+						const matchedOption = matchedAddon.options.find(prodOp => prodOp._id.toString() === currOp._id.toString());
+						if (matchedOption) pickedData.addonsPrice += +matchedOption.price * currProd.quantity;
+					}))
+				}
+		}));
 		currProd.unitPrice = exProd.price;
 		pickedData.subTotal += +currProd.quantity * +exProd.price;
 	}
 
-	pickedData.total = (+pickedData.subTotal +  +pickedData.shippingPrice).toString();
+	pickedData.total = (+pickedData.subTotal +  +pickedData.shippingPrice + +pickedData.addonsPrice).toString();
 	const exCustomer = await User.findById(customerId).lean();
 	const validShippingAddress = exCustomer.shippingAddresses.find(sa => sa._id.toString() === pickedData.shippingAddressId);
 	if (!validShippingAddress) throw new Error('Invalid shipping address');
 
-	pickedData.orderNumber =  `#${Date.now()}`,
-	pickedData.customerId = customerId.toString(),
+	pickedData.orderNumber =  `#${Date.now()}`;
+	pickedData.customerId = customerId.toString();
 	pickedData.vendorId = currentVendor.toString();
 	pickedData.status = ORDER_STATUSES.PENDING;
 	return pickedData;
