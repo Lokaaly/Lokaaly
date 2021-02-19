@@ -46,8 +46,6 @@
 *      schema:
 *       type: object
 *       properties:
-*        orderDate:
-*         type: Date
 *        comment:
 *         type: string
 *        quantity:
@@ -92,12 +90,9 @@
 *      type: number
 *     comment:
 *      type: string
-*     orderDate:
-*      type: Date
 *    required:
 *     - "productId"
 *     - "quantity"
-*     - "orderDate"
 *
 *   AddonDTO_AddToCart:
 *    type: object

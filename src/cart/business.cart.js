@@ -43,7 +43,7 @@ exports.addToCart = async (customerId, data) => {
 };
 
 exports.updateProductCart = async (customerId, cartProductId, upData) => {
-	const pickedData = _.pick(upData, ['addons', 'comment', 'orderDate', 'quantity']);
+	const pickedData = _.pick(upData, ['addons', 'comment', 'quantity']);
 	const cartProduct = await CartProduct.findOneAndUpdate({ _id: cartProductId, customerId: customerId.toString()  }, { ...pickedData }).lean();
 	return cartProduct;
 };

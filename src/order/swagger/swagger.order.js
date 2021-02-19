@@ -88,12 +88,12 @@
 *          type: object
 *        quantity:
 *         type: number
-*        orderDate:
-*         type: Date
 *        comment:
 *         type: string
 *     shippingAddressId:
 *      type: string
+*     deliveryDate:
+*      type: Date
 *     paymentMethod:
 *      type: number
 */

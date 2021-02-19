@@ -18,9 +18,6 @@ const CartProductSchema = new Schema({
 		type: Schema.Types.Mixed
 	},
 	size: String,
-	orderDate: {
-		type: Schema.Types.Date
-	},
 	comment: String,
 	quantity: Number,
 }, {
@@ -35,7 +32,6 @@ CartProductSchema.pre('save', async function () {
 	if (cartProduct.isNew) {
 		debugger;
 		const exProduct = await Product.findById(cartProduct.productId).lean();
-		if (Date.now() > Date.parse(cartProduct.orderDate)) throw new Error('Invalid order date');
 
 		// Check product validity
 		if (!exProduct) throw new Error('Product doesn\'t exist.');

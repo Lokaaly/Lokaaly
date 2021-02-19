@@ -23,9 +23,6 @@ const orderProductSchema = new Schema({
 		type: Schema.Types.Mixed
 	},
 	size: String,
-	orderDate: {
-		type: Schema.Types.Date
-	},
 	comment: String,
 	quantity: Number,
 	unitPrice: String
@@ -62,6 +59,9 @@ const OrderSchema = new Schema({
 	status: {
 		type: String,
 		enum: Object.values(ORDER_STATUSES)
+	},
+	deliveryDate: {
+		type: Schema.Types.Date
 	},
 	shippingPrice: String,
 	addonsPrice: String,

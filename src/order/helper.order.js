@@ -4,7 +4,7 @@ const { User } = require('../models/model.user');
 const _ = require('lodash');
 
 async function initializeOrderDTO(customerId, data) {
-	const pickedData = _.pick(data, ['products', 'shippingAddressId', 'paymentMethod']);
+	const pickedData = _.pick(data, ['products', 'shippingAddressId', 'paymentMethod', 'deliveryDate']);
 	pickedData.addonsPrice = 0;
 	pickedData.subTotal = 0;
 	pickedData.shippingPrice = 15;
