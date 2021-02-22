@@ -120,6 +120,8 @@
 *         type: string
 *        socialMedia:
 *         type: string
+*        whatsapp:
+*         type: string
 *        $pushImages:
 *         type: array
 *         items:

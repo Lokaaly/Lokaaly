@@ -25,6 +25,7 @@ const VendorSchema = new Schema({
 	businessType: String,
 	description: String,
 	socialMedia: String,
+	whatsapp: String,
 	profileImage: String,
 	backgroundImage: String,
 	photos: [new Schema({
