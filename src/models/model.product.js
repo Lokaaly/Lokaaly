@@ -43,7 +43,7 @@ const ProductSchema = new Schema({
 	},
 	dietaryType: {
 		type: String,
-		enum: Object.values(DIETART_TYPES).values
+		enum: Object.values(DIETART_TYPES)
 	},
 	description: {
 		type: String,
