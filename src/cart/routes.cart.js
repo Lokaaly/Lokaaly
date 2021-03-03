@@ -9,6 +9,7 @@ const CustomerAuth = AuthMiddleware([ROLES.CUSTOMER]);
 
 // /api/cart
 router.get('/', CustomerAuth, wrapAsync(cartController.getCartData));
+router.get('/:cartProductId', CustomerAuth, wrapAsync(cartController.getCartProductById));
 router.post('/', CustomerAuth, wrapAsync(cartController.addToCart));
 router.put('/:cartProductId', CustomerAuth, wrapAsync(cartController.updateProductCart));
 router.delete('/', CustomerAuth, wrapAsync(cartController.deleteCart));

@@ -5,7 +5,7 @@ const { User } = require('../models/model.user');
 
 exports.getCartData = async (customerId) => {
 	const cartProducts = await CartProduct.find({ customerId }).lean();
-	
+
 	if (cartProducts && Array.isArray(cartProducts)) {
 		for (let i = 0; i < cartProducts.length; i++) {
 			const cartProd = cartProducts[i];
@@ -32,6 +32,11 @@ exports.getCartData = async (customerId) => {
 		groupedByVendor.push({...vendorData, cart: [...groupedCartProducts[vId]]});
 	}));
 	return groupedByVendor;
+};
+
+exports.getCartProductById = async (customerId, cartProductId) => {
+	const cartProduct = await CartProduct.findOne({ _id: cartProductId, customerId: customerId.toString()}).lean();
+	return cartProduct;
 };
 
 exports.addToCart = async (customerId, data) => {

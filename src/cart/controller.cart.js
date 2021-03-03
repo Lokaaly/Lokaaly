@@ -4,6 +4,11 @@ exports.getCartData = async (req, res) => {
 	return await businessCart.getCartData(req.user._id);
 };
 
+exports.getCartProductById = async (req, res) => {
+	const { cartProductId } = req.params || {};
+	return await businessCart.getCartProductById(req.user._id, cartProductId);
+};
+
 exports.addToCart = async (req, res) => {
 	return await businessCart.addToCart(req.user._id, req.body);
 };

@@ -106,3 +106,25 @@
 *       type: string
 *       summary: 'Provide option ids'
 */
+
+/**
+* 	@swagger
+*
+* /cart/{cartProductId}:
+*  get:
+*   tags:
+*    - 'cart'
+*   security:
+*    - bearerAuth: []
+*   parameters:
+*    - in: path
+*      name: cartProductId
+*      required: true
+*      schema:
+*       type: string
+*      description: Provide cart product id - _id
+*   summary: 'Get cart product data info'
+*   responses:
+*    '200':
+*     description: Successful operation
+*/
