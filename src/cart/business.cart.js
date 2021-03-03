@@ -36,6 +36,8 @@ exports.getCartData = async (customerId) => {
 
 exports.getCartProductById = async (customerId, cartProductId) => {
 	const cartProduct = await CartProduct.findOne({ _id: cartProductId, customerId: customerId.toString()}).lean();
+	const productInfo = await Product.findById(id).lean();
+	if (cartProduct) cartProduct.productInfo = productInfo;
 	return cartProduct;
 };
 
