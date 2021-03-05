@@ -14,6 +14,6 @@ router.get('/', MultiAuth, wrapAsync(ordersController.getOrdersList));
 router.get('/:orderId', MultiAuth, wrapAsync(ordersController.getOrderById));
 router.post('/', CustomerAuth, wrapAsync(ordersController.makeOrder));
 
-router.post('/action/:orderId', VendorAuth, wrapAsync(ordersController.orderAction));
+router.post('/vendor-action', VendorAuth, wrapAsync(ordersController.orderActionByVendor));
 
 module.exports = router;

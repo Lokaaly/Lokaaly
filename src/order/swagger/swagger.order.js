@@ -69,6 +69,28 @@
 *    '200':
 *     description: Successful operation
 *
+* /orders/vendor-action:
+*  get:
+*   tags:
+*    - 'orders'
+*   security:
+*    - bearerAuth: []
+*   requestBody:
+*    content:
+*     application/json:
+*      schema:
+*       type: object
+*       properties:
+*        orderNumber:
+*         type: string
+*        status:
+*         type: string
+*         enum: [accepted, rejected]
+*   summary: 'Update order by accepting, rejecting (Role - vendor)'
+*   responses:
+*    '200':
+*     description: Successful operation
+*
 * components:
 *  schemas:
 *   Order_DTO:

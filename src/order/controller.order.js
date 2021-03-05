@@ -14,6 +14,6 @@ exports.makeOrder = async (req, res) => {
 	return await businessOrder.makeOrder(req.user._id, req.body);
 };
 
-exports.orderAction = async (req, res) => {
-	return await businessOrder.orderAction(user, req.body);
+exports.orderActionByVendor = async (req, res) => {
+	return await businessOrder.orderActionByVendor(user, req.body);
 };

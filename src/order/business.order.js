@@ -1,7 +1,7 @@
-const { Orders } = require('../models/model.order');
+const { Orders, ORDER_STATUSES } = require('../models/model.order');
 const { ROLES } = require('../models/static.data');
 const { initializeOrderDTO } = require('./helper.order');
-
+const _ = require('lodash');
 exports.getOrdersList = async (user, filter) => {
 	const query = {};
 	const { skip, limit, status, customerId, vendorId } = filter;
@@ -57,6 +57,9 @@ exports.makeOrder = async (userId, data) => {
 	return await order.save();
 };
 
-exports.orderAction = async (user, data) => {
-	return [];
+exports.orderActionByVendor = async (vendor, data) => {
+	if (!data || !data.orderNumber || !Object.values(ORDER_STATUSES).includes(data.status)) throw new Error('Order number or action is missing.!');
+	const body = _.pick(data, ['orderNumber', 'status']);
+	const updatedOrder = await Orders.findOneAndUpdate({ vendorId: vendor._id.toString(), orderNumber: body.orderNumber }, { status: body.status }, { new: true });
+	return updatedOrder;
 };
