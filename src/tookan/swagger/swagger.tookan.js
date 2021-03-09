@@ -92,4 +92,29 @@
 *      schema:
 *       type: string
 *      description: Provide driver id.
+*  put:
+*   summary: 'Update tookan driver'
+*   tags:
+*    - 'tookan'
+*   security:
+*    - bearerAuth: []
+*   responses:
+*    '200':
+*     description: Successful operation
+*   parameters:
+*    - in: path
+*      name: agentId
+*      required: true
+*      schema:
+*       type: string
+*      description: Provide driver id.
+*   requestBody:
+*    content:
+*     application/json:
+*      schema:
+*       type: object
+*       properties:
+*        status:
+*         type: string
+*         enum: [verified]
 */

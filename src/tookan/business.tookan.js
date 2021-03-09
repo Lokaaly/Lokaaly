@@ -1,5 +1,6 @@
 const { uploadFileInS3 } = require('../helpers/s3_uploader');
 const { Driver } = require('../models/model.driver');
+const _ = require('lodash');
 
 exports.sendRequestForAgentRegistration = async (driverRequest) => {
 	let { drivingLicense, passport } = driverRequest;
@@ -33,4 +34,9 @@ exports.getTookanDrivers = async (filter) => {
 
 exports.getTookanDriverById = async (driverId) => {
 	return await Driver.findById(driverId).lean();
+};
+
+exports.updateAgentById = async (agentId, data) => {
+	let body = _.pick(data, ['status']);
+	return await Driver.findOneAndUpdate({ _id: agentId }, { ...body }, { new: true }).lean();
 };

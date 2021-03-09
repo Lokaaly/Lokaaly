@@ -11,6 +11,7 @@ const adminAuth = AuthMiddleware([ROLES.ADMIN]);
 // /api/tookan
 router.get('/agents', adminAuth, wrapAsync(tookanController.getAgentsList));
 router.get('/agents/:agentId', adminAuth, wrapAsync(tookanController.getAgentById));
+router.put('/agents/:agentId', adminAuth, wrapAsync(tookanController.updateAgentById));
 
 router.post('/agents/sign-up',
 	uploader().fields([{ name: 'passport', maxCount: 1 }, { name: 'drivingLicense', maxCount: 1 }]),

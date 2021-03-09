@@ -16,3 +16,9 @@ exports.getAgentById = async (req, res) => {
 	return await businessTookan.getTookanDriverById(agentId);
 };
 
+exports.updateAgentById = async (req, res) => {
+	const { agentId } = req.params;
+	const data = req.body || {};
+	return await businessTookan.updateAgentById(agentId, data);
+};
+
