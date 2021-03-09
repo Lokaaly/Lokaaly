@@ -5,6 +5,7 @@ const productRoutes = require('./product/routes.product');
 const cartRoutes = require('./cart/routes.cart');
 const staticRoutes = require('./static/routes.static');
 const orderRoutes = require('./order/routes.order');
+const tookanRoutes = require('./tookan/routes.tookan');
 
 module.exports = [{
 	path: 'users',
@@ -15,6 +16,9 @@ module.exports = [{
 }, {
 	path: 'vendors',
 	router: vendorRoutes,
+}, {
+	path: 'tookan',
+	router: tookanRoutes,
 }, {
 	path: 'products',
 	router: productRoutes,
