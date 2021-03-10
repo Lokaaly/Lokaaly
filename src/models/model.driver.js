@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { MailSenderManager } = require('../helpers/sendGrid');
 const { FLEET_TYPES, USER_STATUSES, TRANSPORT_TYPE } = require('./static.data');
+const { Tookan } = require('../helpers/tookan');
 
 const validateEmail = function (email) {
 	var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -26,6 +26,7 @@ const DriverSchema = new Schema({
 	plateNumber: String,
 	drivingLicense: String,
 	passport: String,
+	fleetId: Number,
 	fleetType: {
 		type: String,
 		enum: Object.values(FLEET_TYPES),
@@ -53,6 +54,17 @@ DriverSchema.pre('save', async function () {
 		driver.status = USER_STATUSES.NOT_VERIFIED;
 		debugger;
 		}
+});
+
+DriverSchema.pre('findOneAndUpdate', async function () {
+	let update = this.getUpdate();
+	let query = this.getQuery();
+	if (update && update.status && update.status === USER_STATUSES.VERIFIED) {
+		// Register driver in tookan system when driver is verified
+		const currentDriver = await Driver.findById(query._id).lean();
+		const data = await Tookan.registerDriver(currentDriver);
+		this._update.fleetId = data.fleet_id;
+	}
 });
 
 const Driver = mongoose.model('Driver', DriverSchema, 'drivers');
