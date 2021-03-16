@@ -38,8 +38,6 @@ async function initializeOrderDTO(customerId, data) {
 	pickedData.customerId = customerId.toString();
 	pickedData.vendorId = currentVendor.toString();
 	pickedData.status = ORDER_STATUSES.PENDING;
-	if (pickedData.paymentMethod ===)
-
 	return pickedData;
 };
 
