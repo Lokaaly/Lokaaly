@@ -60,6 +60,14 @@ const OrderSchema = new Schema({
 		type: String,
 		enum: Object.values(ORDER_STATUSES)
 	},
+	paytabsTransaction: new Schema({
+		tran_ref: String,
+		tran_type: String,
+		redirect_url: String,
+	}, {
+		_id: false,
+		versionKey: false
+	}),
 	deliveryDate: {
 		type: Schema.Types.Date
 	},

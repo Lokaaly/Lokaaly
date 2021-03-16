@@ -1,4 +1,4 @@
-const { Orders, ORDER_STATUSES } = require('../models/model.order');
+const { ORDER_STATUSES } = require('../models/model.order');
 const { Product } = require('../models/model.product')
 const { User } = require('../models/model.user');
 const _ = require('lodash');
@@ -38,6 +38,8 @@ async function initializeOrderDTO(customerId, data) {
 	pickedData.customerId = customerId.toString();
 	pickedData.vendorId = currentVendor.toString();
 	pickedData.status = ORDER_STATUSES.PENDING;
+	if (pickedData.paymentMethod ===)
+
 	return pickedData;
 };
 

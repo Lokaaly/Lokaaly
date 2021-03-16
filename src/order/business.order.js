@@ -1,7 +1,11 @@
 const { Orders, ORDER_STATUSES } = require('../models/model.order');
 const { ROLES } = require('../models/static.data');
+
 const { initializeOrderDTO } = require('./helper.order');
 const _ = require('lodash');
+const { generatePaymentUrl } = require('../paytabs/business.paytabs');
+
+
 exports.getOrdersList = async (user, filter) => {
 	const query = {};
 	const { skip, limit, status, customerId, vendorId } = filter;
@@ -54,6 +58,8 @@ exports.getOrder = async (user, orderId) => {
 exports.makeOrder = async (userId, data) => {
 	const validatedOrder = await initializeOrderDTO(userId, data);
 	const order = new Orders(validatedOrder);
+	const paytabsResponse = await generatePaymentUrl(userId, order._id.toString());
+	order.paytabsTransaction = paytabsResponse;
 	return await order.save();
 };
 

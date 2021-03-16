@@ -6,12 +6,6 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const cors = require('cors');
 
-
-const rp = require('request-promise');
-const formidableMiddleware = require('express-formidable');
-
-
-
 const mongoose = require('mongoose');
 
 const express = require('express');
@@ -43,37 +37,6 @@ const swaggerDocs = swaggerJsDoc({
 	},
 	apis: ['./src/**/swagger/swagger.*.js']
 });
-
-app.post('/api/paytabs/payment', formidableMiddleware(), async (req, res) => {
-	try {
-		debugger;
-		var options = { 
-			method: "POST", 
-			uri: "https://secure-global.paytabs.com/payment/token",
-			body: { 
-				"profile_id": 61430,
-				"token": req.fields.token,
-			},
-			headers:{
-				"authorization": "SBJNND9HJL-JB6DKTLMGL-9WNJZ6JJJJ",
-				"content-type": "application/json"
-		 },
-			json: true
-		};
-		debugger;
-		const response = await new Promise((resolve, reject) => {
-			rp(options).then(data => {
-				resolve(JSON.parse(data));
-			}).catch(err => { reject(err); })
-		});
-
-		debugger;
-		res.send(response);
-	} catch (error) {
-		res.status(409).send(error)
-	}
-});
-
 
 routesList.forEach((route) => {
 	if (route.router && route.path) app.use(`/api/${route.path}`, route.router);
