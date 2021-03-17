@@ -21,7 +21,7 @@ exports.generatePaymentUrl = async (customerId, orderId) => {
 			"tran_class": "ecom",
 			"cart_id": orderId,
 			"cart_description": `Order - ${currentOrder.orderNumber}`,
-			"cart_currency": "USD", // "AED"
+			"cart_currency": "AED",
 			"hide_shipping": true,
 			// "framed": true,
 			"cart_amount": currentOrder.total,
